@@ -29,7 +29,7 @@ export default async function Paper() {
           <article className="flex w-full flex-col items-center gap-y-4 pb-10 md:w-[40rem] lg:w-[50rem]">
             <div className="flex flex-col gap-y-2">
               <h2 className="text-2xl font-semibold tracking-tighter sm:text-3xl xl:text-4xl/none">
-                Particle on Canvas: Creating Digital Art to Further Scientific Divulgation
+                Particles on Canvas: Creating Digital Art to Further Scientific Divulgation
               </h2>
               <p className="text-muted-foreground text-sm tracking-tight">
                 a project by Beatriz Juliato Coutinho, Éric Carvalho Figueira, Gabriel Willian
