@@ -69,8 +69,8 @@ export default function Header() {
         </nav>
       </header>
       {isMobileMenuOpen ? (
-        <div className="w-full px-10">
-          <div className="flex flex-col w-full justify-end items-start gap-y-6 bg-background rounded-none z-50 px-2 py-4 transition-all duration-200 ease-linear border border-border">
+        <div className="w-full px-6">
+          <div className="flex flex-col w-full justify-end items-start gap-y-8 bg-background rounded-none z-50 px-2 py-4 transition-all duration-200 ease-linear border border-border">
             {links.map((link, i) => {
               return (
                 <Link

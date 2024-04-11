@@ -56,11 +56,15 @@ export default function Generator() {
                     variant={'secondary'}
                     type={'button'}
                     disabled={particleDataInputs.length >= PARTICLE_DATA_INPUT_COUNT}
-                    className="shadow-none border hover:bg-background bg-background rounded-none"
+                    className="shadow-none border hover:bg-background bg-background rounded-none disabled:cursor-not-allowed"
                   >
                     add particle data input
                   </Button>
-                  <Button type={'submit'} disabled className="rounded-none shadow-none">
+                  <Button
+                    type={'submit'}
+                    disabled
+                    className="rounded-none shadow-none cursor-progress hover:bg-foreground"
+                  >
                     generate (coming soon)
                   </Button>
                 </div>
