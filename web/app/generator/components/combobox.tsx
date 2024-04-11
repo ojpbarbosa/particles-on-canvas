@@ -55,7 +55,7 @@ export default function Combobox({
       </PopoverTrigger>
       <PopoverContent className={cn('w-[200px] p-0', className)}>
         <Command>
-          <CommandInput placeholder={`Search ${attributeName.toLowerCase()}...`} className="h-9" />
+          <CommandInput placeholder={`search ${attributeName.toLowerCase()}...`} className="h-9" />
           <CommandEmpty />
           <CommandGroup>
             {attributes.map((attribute) => (
