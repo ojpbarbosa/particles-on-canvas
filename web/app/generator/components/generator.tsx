@@ -59,7 +59,7 @@ export default function Generator() {
                   >
                     add particle data input
                   </Button>
-                  <Button disabled className="rounded-none shadow-none">
+                  <Button disabled className="rounded-none shadow-none cursor-progress">
                     generate (coming soon)
                   </Button>
                 </div>
