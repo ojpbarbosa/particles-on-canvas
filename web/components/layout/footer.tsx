@@ -108,7 +108,9 @@ export default function Footer() {
           </div>
           <div className="flex flex-col gap-y-3">
             <h4 className="font-sans-heading text-sm font-medium">disclaimer</h4>
-            <p className="text-muted-foreground -mt-1 text-sm font-normal"></p>
+            <p className="text-muted-foreground -mt-1 text-sm font-normal">
+              this project is still highly experimental.
+            </p>
           </div>
         </div>
       </div>
