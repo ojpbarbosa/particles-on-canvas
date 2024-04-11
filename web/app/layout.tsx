@@ -8,7 +8,7 @@ import Icon from '@/public/favicon.ico'
 import { cn } from '@/lib/utils'
 
 export const metadata: Metadata = {
-  title: 'Particles on Canvas',
+  title: 'PARTICLES ON CANVAS',
   description: 'Creating digital art to further scientific divulgation',
   icons: [{ rel: 'icon', url: Icon.src }]
 }
