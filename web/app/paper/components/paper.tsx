@@ -16,7 +16,7 @@ export default async function Paper() {
   return (
     <Layout className="h-full w-full justify-start">
       <div className="flex min-h-[80vh] w-full items-start justify-center py-10">
-        <main className="flex w-full xl:flex-row flex-col items-start justify-center gap-x-32 gap-y-10 text-lg font-light px-10 sm:px-6 tracking-tighter md:max-w-7xl md:justify-start">
+        <main className="flex w-full xl:flex-row flex-col items-start justify-center gap-x-44 gap-y-10 text-lg font-light px-10 sm:px-6 tracking-tighter md:max-w-7xl md:justify-start">
           <Link href={file} className="">
             <Button
               className="dark:border-muted px-4 shadow-none bg-background hover:bg-background flex h-9 items-center justify-start gap-x-2 rounded-none border border-neutral-200"
