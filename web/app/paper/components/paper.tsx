@@ -31,11 +31,11 @@ export default async function Paper() {
               <h2 className="text-2xl font-semibold tracking-tighter sm:text-3xl xl:text-4xl/none">
                 Particle on Canvas: Creating Digital Art to Further Scientific Divulgation
               </h2>
-              <p className="text-muted-foreground text-sm tracking-tight md:text-base">
-                A project by Beatriz Juliato Coutinho, Éric Carvalho Figueira, Gabriel Willian
+              <p className="text-muted-foreground text-sm tracking-tight">
+                a project by Beatriz Juliato Coutinho, Éric Carvalho Figueira, Gabriel Willian
                 Bartmanovicz, Hugo Gomes Soares, João Pedro Ferreira Barbosa, Julia Enriquetto de
-                Brito, Marcos Godinho Filho, and Nicolas Militão Livotto, students of the Technical
-                High School of Campinas, São Paulo, Brazil.
+                Brito, Marcos Godinho Filho, and Nicolas Militão Livotto, students of Informatics at
+                the Technical High School of Campinas, São Paulo, Brazil.
               </p>
             </div>
             {paper && <MarkdownContent>{paper?.body}</MarkdownContent>}
