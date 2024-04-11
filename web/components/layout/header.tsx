@@ -31,7 +31,7 @@ export default function Header() {
   return (
     <div className={cn('sticky top-0 z-50 h-14 transition-all duration-200 ease-linear')}>
       <header>
-        <nav className="mx-auto flex h-[52px] w-full max-w-5xl flex-row justify-between gap-x-4 px-10 sm:px-6 py-2 md:max-w-7xl md:gap-x-24 ">
+        <nav className="mx-auto flex h-[52px] w-full max-w-5xl flex-row justify-between gap-x-4 px-6 py-2 md:max-w-7xl md:gap-x-24 ">
           <Link
             className="flex items-center justify-center w-72 text-background backdrop-invert z-20"
             href="/"

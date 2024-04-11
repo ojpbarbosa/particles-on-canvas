@@ -29,7 +29,7 @@ export default function Footer() {
 
   return (
     <footer className="dark:border-muted z-40 flex w-full shrink-0 flex-col items-start gap-2 border-t border-neutral-200 px-0.5 py-6 sm:flex-col md:px-6">
-      <div className="mx-auto flex w-full max-w-5xl flex-col items-start justify-start gap-x-14 gap-y-6 px-10 sm:px-6 md:max-w-7xl md:flex-row">
+      <div className="mx-auto flex w-full max-w-5xl flex-col items-start justify-start gap-x-14 gap-y-6 px-6 md:max-w-7xl md:flex-row">
         <div className="flex h-full w-full justify-between gap-y-14 md:w-auto md:flex-col md:items-start">
           <Link href="/" className="flex h-full">
             PARTICLES ON CANVAS
