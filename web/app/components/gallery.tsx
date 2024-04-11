@@ -30,10 +30,6 @@ const signatures = [
     image: TheFluidEssence
   },
   {
-    image: TheOne,
-    label: '#1'
-  },
-  {
     image: ThePurplePaleBlueDot
   },
   {
@@ -59,7 +55,13 @@ export default function Gallery() {
     <Layout>
       <main className="flex min-h-screen flex-col items-center justify-between p-10 md:p-24">
         <div className="z-10 max-w-5xl gap-10 w-full font-light grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 text-sm">
-          {fisherYatesShuffle(signatures).map((signature, i) => (
+          {[
+            {
+              image: TheOne,
+              label: '#1'
+            },
+            ...fisherYatesShuffle(signatures)
+          ].map((signature, i) => (
             <div key={`signature-${i}`} className="space-y-2">
               <Image src={signature.image} alt={`signature ${i + 1}.`} />
               <p>{extractSignatureImageName(signature).toLowerCase()}</p>
