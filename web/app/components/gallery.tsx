@@ -7,10 +7,10 @@ import AuroraBorealis from '@/public/signatures/aurora-borealis.jpeg'
 import ParticlesDance from '@/public/signatures/particles-dance.jpeg'
 import QuantumSuperpositionPenguinCrow from '@/public/signatures/quantum-superposition-penguin-crow.jpeg'
 import SeeingTheInvisible from '@/public/signatures/seeing-the-invisible.jpeg'
-import TheCarnivalRemnants from '@/public/signatures/the-carnival-remnants.jpeg'
 import TheFluidEssence from '@/public/signatures/the-fluid-essence.jpeg'
 import TheOne from '@/public/signatures/the-one.jpeg'
 import ThePurplePaleBlueDot from '@/public/signatures/the-purple-pale-blue-dot.jpeg'
+import WavesOfTheDreamer from '@/public/signatures/waves-of-the-dreamer.jpeg'
 
 const signatures = [
   {
@@ -27,9 +27,6 @@ const signatures = [
     image: SeeingTheInvisible
   },
   {
-    image: TheCarnivalRemnants
-  },
-  {
     image: TheFluidEssence
   },
   {
@@ -38,6 +35,9 @@ const signatures = [
   },
   {
     image: ThePurplePaleBlueDot
+  },
+  {
+    image: WavesOfTheDreamer
   }
 ]
 
@@ -57,7 +57,7 @@ export default function Gallery() {
 
   return (
     <Layout>
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <main className="flex min-h-screen flex-col items-center justify-between p-10 md:p-24">
         <div className="z-10 max-w-5xl gap-10 w-full font-light grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 text-sm">
           {fisherYatesShuffle(signatures).map((signature, i) => (
             <div key={`signature-${i}`} className="space-y-2">
