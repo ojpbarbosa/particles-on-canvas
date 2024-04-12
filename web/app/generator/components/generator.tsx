@@ -19,7 +19,7 @@ export default function Generator() {
 
   return (
     <Layout className="h-full w-full">
-      <div className="flex min-h-[80vh] w-full items-start justify-center py-10">
+      <div className="flex min-h-[75vh] w-full items-start justify-center py-10">
         <main className="flex w-full flex-col items-center justify-center gap-x-32 gap-y-10 text-lg font-light px-6 tracking-tighter md:max-w-7xl">
           <article className="flex w-full flex-col items-center justify-center gap-y-4 pb-10 md:w-[40rem] lg:w-[50rem]">
             <div className="flex flex-col w-full gap-y-8 md:pl-24">

@@ -3,16 +3,16 @@ import Image, { StaticImageData } from 'next/image'
 import Layout from '@/components/layout'
 import { fisherYatesShuffle } from '@/lib/utils'
 
-import AuroraBorealis from '@/public/signatures/aurora-borealis.jpeg'
-import ParticlesDance from '@/public/signatures/particles-dance.jpeg'
-import QuantumSuperpositionPenguinCrow from '@/public/signatures/quantum-superposition-penguin-crow.jpeg'
-import SeeingTheInvisible from '@/public/signatures/seeing-the-invisible.jpeg'
-import TheFluidEssence from '@/public/signatures/the-fluid-essence.jpeg'
-import TheOne from '@/public/signatures/the-one.jpeg'
-import ThePurplePaleBlueDot from '@/public/signatures/the-purple-pale-blue-dot.jpeg'
-import WavesOfTheDreamer from '@/public/signatures/waves-of-the-dreamer.jpeg'
+import AuroraBorealis from '@/public/gallery/aurora-borealis.jpeg'
+import ParticlesDance from '@/public/gallery/particles-dance.jpeg'
+import QuantumSuperpositionPenguinCrow from '@/public/gallery/quantum-superposition-penguin-crow.jpeg'
+import SeeingTheInvisible from '@/public/gallery/seeing-the-invisible.jpeg'
+import TheFluidEssence from '@/public/gallery/the-fluid-essence.jpeg'
+import TheOne from '@/public/gallery/the-one.jpeg'
+import ThePurplePaleBlueDot from '@/public/gallery/the-purple-pale-blue-dot.jpeg'
+import WavesOfTheDreamer from '@/public/gallery/waves-of-the-dreamer.jpeg'
 
-const signatures = [
+const gallery = [
   {
     image: AuroraBorealis
   },
@@ -60,7 +60,7 @@ export default function Gallery() {
               image: TheOne,
               label: '#1'
             },
-            ...fisherYatesShuffle(signatures)
+            ...fisherYatesShuffle(gallery)
           ].map((signature, i) => (
             <div key={`signature-${i}`} className="space-y-2">
               <Image src={signature.image} alt={`signature ${i + 1}.`} />

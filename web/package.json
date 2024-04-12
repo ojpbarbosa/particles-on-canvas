@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "email": "email dev"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -20,6 +21,8 @@
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
+    "@react-email/components": "^0.0.16",
+    "@react-email/tailwind": "^0.0.15",
     "@tailwindcss/typography": "^0.5.12",
     "@types/mdx": "^2.0.12",
     "@vercel/analytics": "^1.2.2",
@@ -34,6 +37,7 @@
     "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-email": "^2.1.1",
     "react-hook-form": "^7.51.2",
     "react-icons": "^5.0.1",
     "react-use": "^17.5.0",
