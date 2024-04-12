@@ -21,7 +21,10 @@ type ContactEmailProps = {
   authorsMailingList: string[]
 }
 
-const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/gallery` : '/static'
+const baseUrl =
+  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+    ? `https://particles-on-canvas.vercel.app/gallery`
+    : '/static'
 
 export default function ContactEmail({
   firstName,
@@ -64,7 +67,7 @@ export default function ContactEmail({
               share the message with the other authors before replying.
             </Text>
             <Link
-              href={`mailto:${email}?subject=Particles on Canvas Team Reply&bcc=${authorsMailingList.join(
+              href={`mailto:${email}?subject=Particles%20on%20Canvas%20Reply&bcc=${authorsMailingList.join(
                 ','
               )}`}
               className="bg-white border text-sm text-black border-gray-600 rounded-none px-4 py-2 my-4"
