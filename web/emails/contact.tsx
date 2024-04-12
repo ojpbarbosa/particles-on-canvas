@@ -26,13 +26,15 @@ export default function ContactEmail({
   return (
     <Html>
       <Head />
-      <Preview>{fullName} sent a message!</Preview>
+      <Preview>{message}!</Preview>
       <Tailwind>
         <Body className="bg-black font-mono">
-          <Container className="px-3 mx-auto">
-            <h1 className="text-xl font-bold text-white p-0">new message from {firstName}</h1>
+          <Container className="px-3 mx-auto my-6">
+            <h1 className="bg-white border text-lg w-52 text-center text-black border-gray-600 rounded-none mt-8 px-4 py-2 mb-4">
+              PARTICLES ON CANVAS
+            </h1>
             <Text className="text-gray-300 my-6">
-              {fullName} sent a message from{' '}
+              {fullName} sent the following message from{' '}
               <Link
                 href={`mailto:${email}`}
                 target="_blank"
@@ -41,9 +43,8 @@ export default function ContactEmail({
               >
                 {email}
               </Link>{' '}
-              on {date}.
+              on {date}:
             </Text>
-            <Text className="text-gray-300 mt-6">message:</Text>
             <textarea
               readOnly
               defaultValue={message}
@@ -68,7 +69,7 @@ export default function ContactEmail({
               className="mt-8"
               alt="Particles on Canvas's Image"
             />
-            <Text className="text-gray-500 text-sm leading-6 mt-3 mb-6">
+            <Text className="text-gray-500 text-sm leading-6 mt-3 mb-10">
               <Link
                 href={baseUrl}
                 target="_blank"

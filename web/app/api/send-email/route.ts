@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         const { data, error } = await resend.emails.send({
           from: `Particles on Canvas <${process.env.FROM_EMAIL!}>`,
           to: authorEmail,
-          subject: `Contact from ${firstName} ${lastName}`,
+          subject: `Contact from ${firstName}`,
           react: ContactEmail({
             firstName,
             lastName,
