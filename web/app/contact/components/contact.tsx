@@ -84,7 +84,7 @@ export default function Contact() {
       .then((response) => response.json())
       .then((data) => {
         setLoading(false)
-        if (data.emails) {
+        if (data.emails && data.emails.length > 0) {
           form.reset()
           toast({
             variant: 'default',

@@ -9,31 +9,40 @@ export async function POST(request: Request) {
   try {
     const { firstName, lastName, email, message } = await request.json()
 
-    const emails: { id: string }[] = []
+    const emails: string[] = []
     const errors: ErrorResponse[] = []
 
     const date = new Date().toString()
 
-    authorsMailingList.forEach(async (authorEmail) => {
-      const { data, error } = await resend.emails.send({
-        from: `Particles on Canvas <${process.env.FROM_EMAIL!}>`,
-        to: authorEmail,
-        subject: `Contact from ${firstName} ${lastName}`,
-        react: ContactEmail({ firstName, lastName, email, message, date, authorsMailingList })
-      })
+    await Promise.all(
+      authorsMailingList.map(async (authorEmail) => {
+        const { data, error } = await resend.emails.send({
+          from: `Particles on Canvas <${process.env.FROM_EMAIL!}>`,
+          to: authorEmail,
+          subject: `Contact from ${firstName} ${lastName}`,
+          react: ContactEmail({
+            firstName,
+            lastName,
+            email,
+            message,
+            date,
+            authorsMailingList: authorsMailingList.filter((email) => email !== authorEmail)
+          })
+        })
 
-      if (error) {
-        errors.push(error)
-      } else {
-        emails.push(data as { id: string })
-      }
-    })
+        if (error) {
+          errors.push(error)
+        } else if (data) {
+          emails.push(data.id)
+        }
+      })
+    )
 
     if (errors.length > 0) {
-      return Response.json({ errors })
+      return new Response(JSON.stringify({ errors }), { status: 400 })
     }
 
-    return Response.json({ emails })
+    return new Response(JSON.stringify({ emails }), { status: 200 })
   } catch (error) {
     return Response.json({ error })
   }

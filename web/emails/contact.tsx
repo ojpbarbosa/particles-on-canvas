@@ -1,14 +1,4 @@
-import {
-  Body,
-  Button,
-  Container,
-  Head,
-  Html,
-  Img,
-  Link,
-  Preview,
-  Text
-} from '@react-email/components'
+import { Body, Container, Head, Html, Img, Link, Preview, Text } from '@react-email/components'
 import { Tailwind } from '@react-email/tailwind'
 import * as React from 'react'
 
@@ -21,10 +11,7 @@ type ContactEmailProps = {
   authorsMailingList: string[]
 }
 
-const baseUrl =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
-    ? `https://particles-on-canvas.vercel.app/gallery`
-    : '/static'
+const baseUrl = 'https://particles-on-canvas.vercel.app'
 
 export default function ContactEmail({
   firstName,
@@ -63,7 +50,7 @@ export default function ContactEmail({
               rows={7}
               className="text-sm p-4 resize-none font-mono rows block w-11/12 min-h-20 h-auto bg-black rounded-none border border-gray-600 text-white"
             />
-            <Text className="text-gray-500 my-6">
+            <Text className="text-gray-500 mt-4 mb-6">
               share the message with the other authors before replying.
             </Text>
             <Link
@@ -75,7 +62,7 @@ export default function ContactEmail({
               click to reply
             </Link>
             <Img
-              src={`${baseUrl}/the-one.jpeg`}
+              src={`${baseUrl}/gallery/the-one.jpeg`}
               width="52"
               height="52"
               className="mt-8"
@@ -83,7 +70,7 @@ export default function ContactEmail({
             />
             <Text className="text-gray-500 text-sm leading-6 mt-3 mb-6">
               <Link
-                href="https://particles-on-canvas.vercel.app"
+                href={baseUrl}
                 target="_blank"
                 referrerPolicy="no-referrer"
                 className="text-[#04dcd4] underline"
