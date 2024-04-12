@@ -6,6 +6,7 @@ import '@/styles/globals.css'
 import Providers from './providers'
 import Icon from '@/public/favicon.ico'
 import { cn } from '@/lib/utils'
+import { Toaster } from '@/components/ui/toaster'
 
 export const metadata: Metadata = {
   title: 'PARTICLES ON CANVAS',
@@ -27,6 +28,7 @@ export default function RootLayout({
         )}
       >
         <Providers>{children}</Providers>
+        <Toaster />
         <Analytics />
       </body>
     </html>

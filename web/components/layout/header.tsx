@@ -20,6 +20,10 @@ const links = [
   {
     url: '/generator',
     label: 'generator'
+  },
+  {
+    url: '/contact',
+    label: 'contact'
   }
 ]
 
@@ -46,7 +50,9 @@ export default function Header() {
                     key={`header-ref-${i}`}
                     className={cn(
                       'text-muted-foreground hover:text-foreground flex h-0 items-center text-sm font-normal transition-colors duration-200',
-                      pathname === link.url && 'text-foreground underline underline-offset-4'
+                      (pathname === link.url ||
+                        pathname.replace('/', '').toLowerCase() === link.label) &&
+                        'text-foreground underline underline-offset-4'
                     )}
                     href={link.url}
                   >
@@ -77,7 +83,9 @@ export default function Header() {
                   key={`header-ref-${i}`}
                   className={cn(
                     'text-muted-foreground flex h-0 items-center text-sm font-normal transition-colors duration-200',
-                    pathname === link.url && 'text-foreground underline underline-offset-4'
+                    (pathname === link.url ||
+                      pathname.replace('/', '').toLowerCase() === link.label) &&
+                      'text-foreground underline underline-offset-4'
                   )}
                   href={link.url}
                 >

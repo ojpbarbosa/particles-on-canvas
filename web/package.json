@@ -19,6 +19,7 @@
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-toast": "^1.1.5",
     "@tailwindcss/typography": "^0.5.12",
     "@types/mdx": "^2.0.12",
     "@vercel/analytics": "^1.2.2",
@@ -39,6 +40,7 @@
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.0",
     "remark-toc": "^9.0.0",
+    "resend": "^3.2.0",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"
