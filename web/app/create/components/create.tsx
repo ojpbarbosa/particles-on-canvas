@@ -42,7 +42,7 @@ export default function Create() {
               <div className="flex w-full items-start gap-y-4 justify-center flex-col">
                 <div className="space-y-8">
                   {particleDataInputs.map((input, i) => (
-                    <div key={`particle-input-${i}`}>
+                    <div key={`particle-input-${i}`} className="space-y-8">
                       <ParticleDataInput />
                       {particleDataInputs.length > 1 && i !== particleDataInputs.length - 1 && (
                         <hr />

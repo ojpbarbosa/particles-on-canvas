@@ -91,7 +91,10 @@ export default function ParticleDataInput() {
                   <FormControl>
                     <Input
                       type="number"
-                      className={cn('rounded-none', field.value === '0' && 'text-muted-foreground')}
+                      className={cn(
+                        'rounded-none shadow-none',
+                        field.value === '0' && 'text-muted-foreground'
+                      )}
                       min={0}
                       {...field}
                     />
@@ -107,9 +110,11 @@ export default function ParticleDataInput() {
               name="spatialDistribution"
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-y-1">
-                  <FormLabel className="font-normal">spatial distribution</FormLabel>
+                  <FormLabel className="font-normal text-muted-foreground">
+                    spatial distribution (coming soon)
+                  </FormLabel>
                   <FormControl>
-                    <Input type="file" disabled className="rounded-none" {...field} />
+                    <Input type="file" disabled className="rounded-none shadow-none" {...field} />
                   </FormControl>
                   <FormMessage className="text-muted-foreground lowercase tracking-tighter font-normal">
                     allowed file types: .csv, .npy

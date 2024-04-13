@@ -47,7 +47,11 @@ export default function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn('w-[200px] justify-between', className, !value && 'text-muted-foreground')}
+          className={cn(
+            'w-[200px] justify-between shadow-none hover:bg-background',
+            className,
+            !value && 'text-muted-foreground hover:text-muted-foreground'
+          )}
         >
           {value ? attributes.find((attribute) => attribute.value === value)?.label : attributeName}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
