@@ -14,10 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 
 type ComboboxProps = {
   attributeName: string
-  attributes: {
-    value: string
-    label: string
-  }[]
+  attributes: string[]
   onChange: (value: string) => void
   value: string
   disabled?: boolean
@@ -34,7 +31,7 @@ export default function Combobox({
 }: ComboboxProps) {
   const [open, setOpen] = useState(false)
 
-  const handleSelect = (selectedValue: string) => {
+  function handleSelect(selectedValue: string) {
     onChange(selectedValue)
     setOpen(false)
   }
@@ -52,7 +49,7 @@ export default function Combobox({
             !value && 'text-muted-foreground hover:text-muted-foreground'
           )}
         >
-          {value ? attributes.find((attribute) => attribute.value === value)?.label : attributeName}
+          {value ? value : attributeName}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -63,15 +60,16 @@ export default function Combobox({
           <CommandGroup>
             {attributes.map((attribute) => (
               <CommandItem
-                key={`combobox-particle-data-input-${attribute.value}`}
-                value={attribute.value}
-                onSelect={() => handleSelect(attribute.value)}
+                key={`combobox-particle-data-input-${attribute}`}
+                value={attribute}
+                onSelect={() => handleSelect(attribute)}
+                className="cursor-pointer"
               >
-                {attribute.label}
+                {attribute}
                 <CheckIcon
                   className={cn(
                     'ml-auto h-4 w-4',
-                    value === attribute.value ? 'opacity-100' : 'opacity-0'
+                    value === attribute ? 'opacity-100' : 'opacity-0'
                   )}
                 />
               </CommandItem>
