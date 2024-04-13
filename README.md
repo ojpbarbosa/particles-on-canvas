@@ -12,7 +12,7 @@
 
 Introducing the Particles on Canvas project for the [Beamline for Schools Competition](https://beamlineforschools.cern) 2024: creating digital art to further scientific divulgation. We've designed a unique methodology that merges the realms of art and science, transforming complex scientific data into captivating digital artwork. By converting experimental data into visually intuitive and engaging art, we make the intricacies of science accessible and fascinating to all. Our approach not only bridges the gap between these two disciplines but also enhances public engagement and stimulates a creative dialogue around scientific discoveries.
 
-For further information, please [refer to the paper](https://particles-on-canvas.vercel.app/paper.pdf).
+For further information, please [refer to the paper](https://particles-on-canvas.vercel.app/paper).
 
 ## Team
 Particles on Canvas was designed by:
