@@ -9,7 +9,7 @@ import ParticleDataInput from './particle-data-input'
 
 const PARTICLE_DATA_INPUT_COUNT = 4
 
-export default function Generator() {
+export default function Create() {
   const [particleDataInputs, setParticleDataInputs] = useState([{ data: {}, date: new Date() }])
 
   function addParticleDataInput() {
@@ -26,7 +26,7 @@ export default function Generator() {
             <div className="flex flex-col w-full gap-y-8 md:pl-24">
               <div className="flex flex-col w-full gap-y-2">
                 <h4 className="text-lg font-semibold tracking-tight sm:text-xl xl:text-2xl">
-                  generate your own experiment signature
+                  create your own experiment signature
                 </h4>
                 <p className="text-sm text-muted-foreground tracking-tight">
                   refer to the paper section{' '}
@@ -42,12 +42,12 @@ export default function Generator() {
               <div className="flex w-full items-start gap-y-4 justify-center flex-col">
                 <div className="space-y-8">
                   {particleDataInputs.map((input, i) => (
-                    <>
-                      <ParticleDataInput key={`particle-input-${i}`} />
+                    <div key={`particle-input-${i}`}>
+                      <ParticleDataInput />
                       {particleDataInputs.length > 1 && i !== particleDataInputs.length - 1 && (
                         <hr />
                       )}
-                    </>
+                    </div>
                   ))}
                 </div>
 
@@ -66,7 +66,7 @@ export default function Generator() {
                     disabled
                     className="rounded-none shadow-none cursor-progress hover:bg-foreground"
                   >
-                    generate (coming soon)
+                    create (coming soon)
                   </Button>
                 </div>
               </div>

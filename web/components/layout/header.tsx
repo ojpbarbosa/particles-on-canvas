@@ -18,8 +18,8 @@ const links = [
     label: 'paper'
   },
   {
-    url: '/generator',
-    label: 'generator'
+    url: '/create',
+    label: 'create'
   },
   {
     url: '/about',
