@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 
-import Gallery from '@/app/components/gallery'
+import Gallery from './components/gallery'
 
 export const metadata: Metadata = {
   title: 'PARTICLES ON CANVAS - GALLERY'

@@ -4,28 +4,55 @@ import fs from 'fs/promises'
 import { cache } from 'react'
 
 export type Content = {
-  type: 'paper'
+  slug: string
   body: string
+  kind: string
+  [key: string]: string
 }
 
-export const getContents = cache(async () => {
-  const content = await fs.readdir('./content/')
-
-  return Promise.all(
-    content
-      .filter((file) => path.extname(file) === '.mdx')
-      .map(async (file) => {
-        const fileName = file.split('.')[0]
-        const filePath = `./content/${file}`
-        const fileContent = await fs.readFile(filePath, 'utf8')
-        const { data, content } = matter(fileContent)
-
-        return { ...data, type: fileName, body: content } as Content
-      })
+async function readFilesRecursively(directory: string, base: string = ''): Promise<Content[]> {
+  const entries = await fs.readdir(directory, { withFileTypes: true })
+  const files = entries.filter(
+    (entry) =>
+      entry.isFile() && (path.extname(entry.name) === '.mdx' || path.extname(entry.name) === '.md')
   )
+  const directories = entries.filter((entry) => entry.isDirectory())
+
+  const fileData = await Promise.all(
+    files.map(async (file) => {
+      const filePath = path.join(directory, file.name)
+      const fileContent = await fs.readFile(filePath, 'utf8')
+      const { data, content } = matter(fileContent)
+      const slug = file.name.split('.')[0]
+      const kind = base || slug
+
+      return { ...data, slug, kind, body: content }
+    })
+  )
+
+  const directoryData = await Promise.all(
+    directories.map((subDirectory) =>
+      readFilesRecursively(
+        path.join(directory, subDirectory.name),
+        path.join(base, subDirectory.name)
+      )
+    )
+  )
+
+  return [...fileData, ...directoryData.flat()]
+}
+
+export const getContent = cache(async () => {
+  const directory = './content/'
+  const content = await readFilesRecursively(directory)
+
+  return content
 })
 
-export async function getContent(type: Content['type']) {
-  const contents = await getContents()
-  return contents.find((content) => content.type === type)
-}
+export const getPaper = async () => (await getContent()).find((content) => content.kind === 'paper')
+
+export const getSignatures = async () =>
+  (await getContent()).filter((content) => content.kind === 'gallery')
+
+export const getSignature = async (slug: string) =>
+  (await getSignatures()).find((content) => content.slug === slug)

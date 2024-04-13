@@ -58,7 +58,7 @@ export default function Footer() {
                       className={cn(
                         'text-muted-foreground hover:text-foreground flex h-4 items-center text-sm font-normal transition-colors duration-200',
                         (pathname === link.url ||
-                          pathname.replace('/', '').toLowerCase() === link.label) &&
+                          pathname.replace('/', '').toLowerCase().includes(link.label)) &&
                           'text-foreground underline underline-offset-4'
                       )}
                       href={link.url}

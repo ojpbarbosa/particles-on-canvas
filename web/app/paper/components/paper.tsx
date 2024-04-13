@@ -4,14 +4,14 @@ import Link from 'next/link'
 import Layout from '@/components/layout'
 import MarkdownContent from '@/components/markdown-content'
 import { Button } from '@/components/ui/button'
-import { getContent } from '@/lib/content'
+import { getPaper } from '@/lib/content'
 
 export const dynamic = 'force-static'
 
 const file = '/paper.pdf'
 
 export default async function Paper() {
-  const paper = await getContent('paper')
+  const paper = await getPaper()
 
   return (
     <Layout className="h-full w-full justify-start">
