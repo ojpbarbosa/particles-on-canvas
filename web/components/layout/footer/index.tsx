@@ -35,7 +35,7 @@ export default function Footer() {
   const pathname = usePathname()
 
   return (
-    <footer className="dark:border-muted z-40 flex w-full shrink-0 flex-col items-start gap-2 border-t border-neutral-200 px-0.5 py-6 sm:flex-col md:px-6">
+    <footer className="dark:border-muted z-40 flex w-full shrink-0 flex-col items-start gap-2 border-t border-neutral-200 px-0.5 pt-6 pb-14 sm:flex-col md:px-6">
       <div className="mx-auto flex w-full max-w-5xl flex-col items-start justify-start gap-x-14 gap-y-6 px-6 md:max-w-7xl md:flex-row">
         <div className="flex h-full md:h-40 w-full justify-between gap-y-14 md:w-auto md:flex-col md:items-start">
           <div className="flex flex-col gap-y-1">

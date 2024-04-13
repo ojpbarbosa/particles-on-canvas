@@ -1,4 +1,6 @@
-export async function getVersion() {
+import { cache } from 'react'
+
+export const getVersion = cache(async () => {
   const data = await fetch(
     `https://api.github.com/repos/ojpbarbosa/particles-on-canvas/contents/web/package.json`,
     {
@@ -12,4 +14,4 @@ export async function getVersion() {
   ).then((response) => response.json())
 
   return data.version
-}
+})
