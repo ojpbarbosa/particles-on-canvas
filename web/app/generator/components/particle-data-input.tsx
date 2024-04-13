@@ -36,7 +36,7 @@ const particles = [
 ]
 
 const formSchema = z.object({
-  type: z.string().min(1),
+  particle: z.string().min(1),
   velocity: z.string().min(1),
   spatialDistribution: z.string().min(1)
 })
@@ -46,7 +46,7 @@ export default function ParticleDataInput() {
     resolver: zodResolver(formSchema),
     mode: 'onSubmit',
     defaultValues: {
-      type: '',
+      particle: '',
       velocity: '0'
     }
   })
@@ -63,14 +63,14 @@ export default function ParticleDataInput() {
           <div className="flex flex-col justify-start items-start gap-x-4 gap-y-6 md:flex-row">
             <FormField
               control={form.control}
-              name="type"
+              name="particle"
               render={({ field }) => (
                 <FormItem className="flex max-w-52 flex-col gap-y-1">
-                  <FormLabel className="font-normal">type</FormLabel>
+                  <FormLabel className="font-normal">particle</FormLabel>
                   <FormControl>
                     <Combobox
                       attributes={particles}
-                      attributeName="type"
+                      attributeName="particle"
                       value={field.value}
                       onChange={(value) => field.onChange(value)}
                       className="rounded-none"

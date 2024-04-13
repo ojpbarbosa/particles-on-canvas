@@ -21,6 +21,10 @@ const links = [
     label: 'generator'
   },
   {
+    url: '/about',
+    label: 'about'
+  },
+  {
     url: '/contact',
     label: 'contact'
   }

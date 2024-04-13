@@ -22,6 +22,10 @@ const links = [
     label: 'generator'
   },
   {
+    url: '/about',
+    label: 'about'
+  },
+  {
     url: '/contact',
     label: 'contact'
   }
@@ -47,7 +51,7 @@ export default function Header() {
               {links.map((link, i) => {
                 return (
                   <Link
-                    key={`header-ref-${i}`}
+                    key={`desktop-header-ref-${i}`}
                     className={cn(
                       'text-muted-foreground hover:text-foreground flex h-0 items-center text-sm font-normal transition-colors duration-200',
                       (pathname === link.url ||
@@ -80,7 +84,7 @@ export default function Header() {
             {links.map((link, i) => {
               return (
                 <Link
-                  key={`header-ref-${i}`}
+                  key={`mobile-header-ref-${i}`}
                   className={cn(
                     'text-muted-foreground flex h-0 items-center text-sm font-normal transition-colors duration-200',
                     (pathname === link.url ||

@@ -1,19 +1,20 @@
 'use client'
 
 import React, { useState } from 'react'
+import Link from 'next/link'
+
 import Layout from '@/components/layout'
 import { Button } from '@/components/ui/button'
 import ParticleDataInput from './particle-data-input'
-import Link from 'next/link'
 
 const PARTICLE_DATA_INPUT_COUNT = 4
 
 export default function Generator() {
-  const [particleDataInputs, setParticleDataInputs] = useState([{ id: Math.random(), data: {} }])
+  const [particleDataInputs, setParticleDataInputs] = useState([{ data: {}, date: new Date() }])
 
   function addParticleDataInput() {
     if (particleDataInputs.length < PARTICLE_DATA_INPUT_COUNT) {
-      setParticleDataInputs([...particleDataInputs, { id: Math.random(), data: {} }])
+      setParticleDataInputs([...particleDataInputs, { data: {}, date: new Date() }])
     }
   }
 
@@ -42,7 +43,7 @@ export default function Generator() {
                 <div className="space-y-8">
                   {particleDataInputs.map((input, i) => (
                     <>
-                      <ParticleDataInput key={input.id} />
+                      <ParticleDataInput key={`particle-input-${i}`} />
                       {particleDataInputs.length > 1 && i !== particleDataInputs.length - 1 && (
                         <hr />
                       )}

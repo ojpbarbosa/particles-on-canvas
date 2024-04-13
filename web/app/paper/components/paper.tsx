@@ -35,7 +35,16 @@ export default async function Paper() {
                 a project by Beatriz Juliato Coutinho, Éric Carvalho Figueira, Gabriel Willian
                 Bartmanovicz, Hugo Gomes Soares, João Pedro Ferreira Barbosa, Julia Enriquetto de
                 Brito, Marcos Godinho Filho, and Nicolas Militão Livotto, students of Informatics at
-                the Technical High School of Campinas, São Paulo, Brazil.
+                the Technical High School of Campinas, São Paulo, Brazil, for{' '}
+                <Link
+                  href={'https://beamlineforschools.cern'}
+                  target="_blank"
+                  referrerPolicy="no-referrer"
+                  className="text-[#085fce]/75 hover:text-[#085fce] dark:text-[#04dcd4]/75 hover:dark:text-[#04dcd4] transition-colors duration-100 underline underline-offset-4"
+                >
+                  cern{"'"}s beamline for schools competition 2024
+                </Link>
+                .
               </p>
             </div>
             {paper && <MarkdownContent>{paper?.body}</MarkdownContent>}

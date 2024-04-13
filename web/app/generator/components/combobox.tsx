@@ -60,7 +60,7 @@ export default function Combobox({
           <CommandGroup>
             {attributes.map((attribute) => (
               <CommandItem
-                key={attribute.value}
+                key={`combobox-particle-data-input-${attribute.value}`}
                 value={attribute.value}
                 onSelect={() => handleSelect(attribute.value)}
               >
