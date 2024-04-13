@@ -55,7 +55,7 @@ export default function ContactEmail({
               share the message with the other authors before replying.
             </Text>
             <Link
-              href={`mailto:${email}?subject=Particles%20on%20Canvas%20Reply&bcc=${authorsMailingList.join(
+              href={`mailto:${email}?subject=Particles%20on%20Canvas%20Reply&cc=${authorsMailingList.join(
                 ','
               )}`}
               className="bg-white border text-sm text-black border-gray-600 rounded-none px-4 py-2 my-4"
