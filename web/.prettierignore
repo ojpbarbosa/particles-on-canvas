@@ -1,0 +1,17 @@
+build
+
+node_modules
+package
+
+.env
+.env.*
+!.env.example
+
+.vercel
+.next
+
+.DS_Store
+
+pnpm-lock.yaml
+package-lock.json
+yarn.lock

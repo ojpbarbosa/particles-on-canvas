@@ -1,5 +1,5 @@
 ---
-name: "#1"
+name: '#1'
 interpreter: joão pedro ferreira barbosa
 velocity: 27
 particles: proton, pion, kaon, electron

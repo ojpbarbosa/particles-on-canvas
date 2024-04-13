@@ -1,4 +1,5 @@
-import { ErrorResponse, Resend } from 'resend'
+import type { ErrorResponse } from 'resend'
+import { Resend } from 'resend'
 
 import ContactEmail from '@/emails/contact'
 

@@ -1,5 +1,5 @@
 ---
-name: "quantum superposition: penguin or crow?"
+name: 'quantum superposition: penguin or crow?'
 interpreter: hugo gomes soares
 velocity: 4
 particles: proton

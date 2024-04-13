@@ -99,7 +99,7 @@ export default function Contact() {
           })
         }
       })
-      .catch((err) => {
+      .catch(() => {
         toast({
           variant: 'destructive',
           className: 'rounded-none p-2',

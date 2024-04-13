@@ -1,6 +1,7 @@
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import Link from 'next/link'
-import React, { JSX, ClassAttributes, AnchorHTMLAttributes } from 'react'
+import type { JSX, ClassAttributes, AnchorHTMLAttributes } from 'react'
+import React from 'react'
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
 import remarkToc from 'remark-toc'
@@ -10,7 +11,7 @@ function CustomLink(
     ClassAttributes<HTMLAnchorElement> &
     AnchorHTMLAttributes<HTMLAnchorElement>
 ) {
-  let href = props.href!
+  const href = props.href!
 
   if (href.startsWith('/')) {
     return (
@@ -27,7 +28,7 @@ function CustomLink(
   return <a target="_blank" rel="noopener noreferrer" {...props} />
 }
 
-let components = {
+const components = {
   a: CustomLink
 }
 
