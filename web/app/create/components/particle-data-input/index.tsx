@@ -1,10 +1,11 @@
-import type { ChangeEvent } from 'react'
+import type { ChangeEvent, FocusEvent } from 'react'
 
 import Combobox from './combobox'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { Label } from '@/components/ui/label'
 import type { ParticleData } from '../create'
+import { toast } from '@/components/ui/use-toast'
 
 type ParticleDataInputProps = {
   availableParticles: string[]
@@ -24,11 +25,18 @@ export default function ParticleDataInput({
   }
 
   function handleVelocityChange(event: ChangeEvent<HTMLInputElement>) {
-    if (parseInt(event.target.value) < 1) {
-      event.target.value = '1'
-    }
-
     setParticleData(index, 'velocity', event.target.value)
+  }
+
+  function validateValue(event: FocusEvent<HTMLInputElement, HTMLElement>) {
+    if (parseInt(event.target.value) < 1) {
+      setParticleData(index, 'velocity', '1')
+
+      toast({
+        className: 'rounded-none p-2',
+        description: 'minimum velocity is 1!'
+      })
+    }
   }
 
   return (
@@ -62,6 +70,7 @@ export default function ParticleDataInput({
                 min={1}
                 value={particleData.velocity}
                 onChange={handleVelocityChange}
+                onBlur={validateValue}
               />
               <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
                 cm per ps

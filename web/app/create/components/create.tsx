@@ -1,9 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
-import type { ChangeEvent } from 'react'
+import type { ChangeEvent, FocusEvent } from 'react'
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { LoaderCircle } from 'lucide-react'
+import { ExternalLink, LoaderCircle } from 'lucide-react'
 import { BooleanParam, JsonParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 
 import Layout from '@/components/layout'
@@ -21,6 +22,7 @@ import {
 import Combobox from './particle-data-input/combobox'
 import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from '@/components/ui/use-toast'
+import { type Signatures, createSignatures } from '@/lib/api'
 
 export type ParticleData = {
   particle: string
@@ -36,6 +38,8 @@ export default function Create() {
     velocity: '1'
     // todo: handle priority and explain it in the form
   }
+
+  const [signatures, setSignatures] = useState({} as Signatures)
 
   const [query, setQuery] = useQueryParams({
     width: withDefault(StringParam, '512'),
@@ -68,8 +72,7 @@ export default function Create() {
 
   function addParticleDataInput() {
     if (particleDataInputs.length < PARTICLES.length) {
-      const newEntry = { particle: '', velocity: '1' }
-      const newData = [...particleDataInputs, newEntry]
+      const newData = [...particleDataInputs, initialParticleData]
       setQuery({ ...query, particleDataInputs: newData })
     }
   }
@@ -89,24 +92,51 @@ export default function Create() {
     // eslint-disable-next-line prefer-const
     let { name, value } = event.target
 
+    setQuery({ ...query, [name]: value })
+  }
+
+  function validateValue(event: FocusEvent<HTMLInputElement, Element>) {
+    // eslint-disable-next-line prefer-const
+    let { name, value } = event.target
+
     if (name === 'width' || name === 'height') {
       if (parseInt(value) > 2048) {
         value = '2048'
+
+        toast({
+          className: 'rounded-none p-2',
+          description: 'maximum width and height is 2048!'
+        })
       } else if (parseInt(value) < 64) {
         value = '64'
+
+        toast({
+          className: 'rounded-none p-2',
+          description: 'minimum width and height is 64!'
+        })
       }
     } else if (name === 'images') {
       if (parseInt(value) > 10) {
         value = '10'
+
+        toast({
+          className: 'rounded-none p-2',
+          description: 'maximum images is 10!'
+        })
       } else if (parseInt(value) < 1) {
         value = '1'
+
+        toast({
+          className: 'rounded-none p-2',
+          description: 'minimum images is 1!'
+        })
       }
     }
 
     setQuery({ ...query, [name]: value })
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     try {
@@ -120,10 +150,15 @@ export default function Create() {
         trig,
         noise,
         activation,
-        particles: particleDataInputs
+        particles: particleDataInputs.map((input: ParticleData) => ({
+          particle: input.particle,
+          velocity: parseInt(input.velocity)
+        }))
       }
 
-      console.log(body)
+      setSignatures(await createSignatures(body))
+
+      setCreationLoading(false)
     } catch {
       setCreationLoading(false)
       toast({
@@ -224,6 +259,7 @@ export default function Create() {
                                   max={10}
                                   value={images}
                                   onChange={handleConfigurationChange}
+                                  onBlur={validateValue}
                                 />
                                 <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
                                   how many images will be created
@@ -246,6 +282,7 @@ export default function Create() {
                                   max={2048}
                                   value={width}
                                   onChange={handleConfigurationChange}
+                                  onBlur={validateValue}
                                 />
                                 <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
                                   final image width (px)
@@ -268,6 +305,7 @@ export default function Create() {
                                   max={2048}
                                   value={height}
                                   onChange={handleConfigurationChange}
+                                  onBlur={validateValue}
                                 />
                                 <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
                                   final image height (px)
@@ -422,16 +460,87 @@ export default function Create() {
                         </Accordion>
                       </div>
                     </div>
-                    <Button
-                      type={'submit'}
-                      disabled={!unableToCreate || creationLoading}
-                      className="rounded-none shadow-none hover:bg-foreground w-20"
-                    >
-                      {creationLoading ? <LoaderCircle className="animate-spin" /> : 'create'}
-                    </Button>
+                    <div className="flex flex-col gap-y-3">
+                      <Button
+                        type={'submit'}
+                        disabled={!unableToCreate || creationLoading}
+                        className="rounded-none shadow-none hover:bg-foreground w-20"
+                      >
+                        {creationLoading ? <LoaderCircle className="animate-spin" /> : 'create'}
+                      </Button>
+                      {(creationLoading || signatures.combinedVelocity) && (
+                        <p className="text-muted-foreground flex h-auto flex-col gap-y-0 text-[12.8px] lowercase tracking-tighter font-normal">
+                          please note that the model still outputs non-consistents results.
+                          <br />
+                          generation might take a few seconds.
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </form>
+              {signatures.combinedVelocity && (
+                <div className="flex flex-col gap-y-6">
+                  <div className="flex flex-col md:flex-row gap-x-2 gap-y-4 md:max-w-52 max-w-full">
+                    <div className="space-y-1 min-w-20">
+                      <p className="text-sm text-muted-foreground">strategy</p>
+                      <p className="text-sm font-semibold tracking-tight">{signatures.strategy}</p>
+                    </div>
+                    <div className="space-y-1 min-w-40">
+                      <p className="text-sm text-muted-foreground">combined velocity</p>
+                      <p className="text-sm font-semibold tracking-tight">
+                        {signatures.combinedVelocity}
+                      </p>
+                    </div>
+                    <div className="space-y-1 min-w-52">
+                      <p className="text-sm text-muted-foreground">layer dimensions</p>
+                      <p className="text-sm font-semibold tracking-tight">
+                        <span className="text-muted-foreground">[</span>
+                        {signatures.layerDimensions.join(', ')}
+                        <span className="text-muted-foreground">]</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="w-full flex flex-col gap-y-4">
+                    <p className="text-sm text-muted-foreground">signatures</p>
+                    <div className="flex flex-col gap-y-6">
+                      {signatures.signatures.map(({ image, seed }, i) => (
+                        <div key={seed} className="flex flex-col gap-y-8">
+                          <div className="flex items-start flex-col gap-y-4">
+                            <img
+                              className="max-w-full max-h-full"
+                              src={`data:image/png;base64,${image}`}
+                            />
+                            <div className="w-full flex flex-col gap-y-3">
+                              <Link
+                                target="_blank"
+                                referrerPolicy="no-referrer"
+                                href={`data:image/png;base64,${image}`}
+                                className="w-40"
+                              >
+                                <Button
+                                  className="dark:border-muted px-4 shadow-none bg-background hover:bg-background flex h-9 items-center justify-start gap-x-2 rounded-none border border-neutral-200"
+                                  variant={'secondary'}
+                                >
+                                  view raw image
+                                  <ExternalLink height={16} width={16} />
+                                </Button>
+                              </Link>
+                              <div className="space-y-1">
+                                <p className="text-sm text-muted-foreground">seed</p>
+                                <p className="text-sm text-muted-foreground tracking-tight break-words">
+                                  {seed}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          {i !== signatures.signatures.length - 1 && <hr />}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </article>
         </main>
