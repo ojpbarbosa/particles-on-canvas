@@ -37,11 +37,15 @@ class SignatureService:
         combined_velocity = 0
 
         for particle in particles:
-            particle_type = particle['particle']
-            velocity = particle['velocity']
-            combined_velocity += velocity
+            particle_type = particle.get('particle', 'electron')
+            velocity = particle.get('velocity', 1)
+            priority = particle.get('priority', 1)
+
+            particle_weighted_velocity = velocity * priority
+            combined_velocity += particle_weighted_velocity
+
             color = color_weights.get(particle_type, 'rgb')
-            color_totals[color] += velocity
+            color_totals[color] += particle_weighted_velocity
 
         max_color = max(color_totals, key=color_totals.get)
         return (combined_velocity, max_color)

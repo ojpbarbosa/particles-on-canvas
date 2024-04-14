@@ -36,6 +36,8 @@ export default function ParticleDataInput({
         className: 'rounded-none p-2',
         description: 'minimum velocity is 1!'
       })
+    } else if (!event.target.value) {
+      setParticleData(index, 'velocity', '1')
     }
   }
 

@@ -6,6 +6,8 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ExternalLink, LoaderCircle } from 'lucide-react'
 import { BooleanParam, JsonParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
+import copy from 'clipboard-copy'
+import { usePathname, useSearchParams } from 'next/navigation'
 
 import Layout from '@/components/layout'
 import { Button } from '@/components/ui/button'
@@ -27,6 +29,7 @@ import { type Signatures, createSignatures } from '@/lib/api'
 export type ParticleData = {
   particle: string
   velocity: string
+  priority: string
 }
 
 const PARTICLES = ['electron', 'proton', 'kaon', 'pion']
@@ -35,11 +38,13 @@ const ACTIVATION_FUNCTIONS = ['tanh', 'sigmoid', 'relu', 'softsign', 'sin', 'cos
 export default function Create() {
   const initialParticleData: ParticleData = {
     particle: '',
-    velocity: '1'
-    // todo: handle priority and explain it in the form
+    velocity: '1',
+    priority: PARTICLES.length.toString()
   }
 
   const [signatures, setSignatures] = useState({} as Signatures)
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const [query, setQuery] = useQueryParams({
     width: withDefault(StringParam, '256'),
@@ -50,12 +55,7 @@ export default function Create() {
     trig: withDefault(BooleanParam, false),
     noise: withDefault(BooleanParam, false),
     activation: withDefault(StringParam, 'tanh'),
-    particleDataInputs: withDefault(JsonParam, [
-      {
-        particle: '',
-        velocity: '1'
-      }
-    ])
+    particleDataInputs: withDefault(JsonParam, [initialParticleData])
   })
 
   const { width, height, images, alpha, symmetry, trig, noise, activation, particleDataInputs } =
@@ -72,10 +72,15 @@ export default function Create() {
 
   function addParticleDataInput() {
     if (particleDataInputs.length < PARTICLES.length) {
-      const newData = [...particleDataInputs, initialParticleData]
+      const newData = [
+        ...particleDataInputs,
+        { ...initialParticleData, priority: PARTICLES.length - particleDataInputs.length }
+      ]
+
       setQuery({ ...query, particleDataInputs: newData })
     }
   }
+
   function removeParticleDataInput(index: number) {
     const newData = [...particleDataInputs]
     newData.splice(index, 1)
@@ -108,12 +113,14 @@ export default function Create() {
           description: 'maximum width and height is 2048!'
         })
       } else if (parseInt(value) < 64) {
-        value = '64'
+        value = '256'
 
         toast({
           className: 'rounded-none p-2',
           description: 'minimum width and height is 64!'
         })
+      } else if (!value) {
+        value = '256'
       }
     } else if (name === 'images') {
       if (parseInt(value) > 10) {
@@ -130,6 +137,8 @@ export default function Create() {
           className: 'rounded-none p-2',
           description: 'minimum images is 1!'
         })
+      } else if (!value) {
+        value = '1'
       }
     }
 
@@ -177,6 +186,23 @@ export default function Create() {
     }
   }
 
+  async function shareCurrentConfiguration() {
+    try {
+      await copy(`https://particles-on-canvas.vercel.app${pathname}?${searchParams.toString()}`)
+
+      toast({
+        className: 'rounded-none p-2',
+        description: 'link copied to clipboard!'
+      })
+    } catch {
+      toast({
+        variant: 'destructive',
+        className: 'rounded-none p-2',
+        description: 'an error occurred, please try again!'
+      })
+    }
+  }
+
   useEffect(() => {
     const isValidInput = particleDataInputs.every(
       (input: ParticleData) => PARTICLES.includes(input.particle) && input.velocity !== ''
@@ -195,7 +221,9 @@ export default function Create() {
                   create your own experiment signature
                 </h4>
                 <p className="text-sm text-muted-foreground tracking-tight">
-                  refer to the paper section{' '}
+                  fill in the desired parameters bellow to create your very own signatures. note
+                  that each particle has a precedence priority; the higher it is, the most influence
+                  it will have on the final signatures. refer to the paper section{' '}
                   <Link
                     href={'/paper#data-driven-art-creation'}
                     className="text-[#085fce]/75 hover:text-[#085fce] dark:text-[#04dcd4]/75 hover:dark:text-[#04dcd4] transition-colors duration-100 underline underline-offset-4"
@@ -219,6 +247,9 @@ export default function Create() {
                           particleData={data}
                           setParticleData={setParticleData}
                         />
+                        <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                          priority #{data.priority}
+                        </p>
                         {i !== 0 && (
                           <Button
                             onClick={() => removeParticleDataInput(i)}
@@ -284,7 +315,7 @@ export default function Create() {
                                   type="number"
                                   className={cn(
                                     'rounded-none shadow-none w-20',
-                                    width === '512' && 'text-muted-foreground'
+                                    width === '256' && 'text-muted-foreground'
                                   )}
                                   min={64}
                                   max={2048}
@@ -307,7 +338,7 @@ export default function Create() {
                                   type="number"
                                   className={cn(
                                     'rounded-none shadow-none w-20',
-                                    height === '512' && 'text-muted-foreground'
+                                    height === '256' && 'text-muted-foreground'
                                   )}
                                   min={64}
                                   max={2048}
@@ -325,7 +356,7 @@ export default function Create() {
                         <Accordion type="single" collapsible className="w-full">
                           <AccordionItem value="accordion-nerd-options">
                             <AccordionTrigger className="underline-offset-4">
-                              nerd options (optional)
+                              nerd options
                             </AccordionTrigger>
                             <AccordionContent className="flex flex-col md:gap-y-6">
                               <div className="flex md:flex-row pt-2 flex-col gap-y-6 gap-x-4">
@@ -469,18 +500,26 @@ export default function Create() {
                       </div>
                     </div>
                     <div className="flex flex-col gap-y-3">
-                      <Button
-                        type={'submit'}
-                        disabled={!unableToCreate || creationLoading}
-                        className="rounded-none shadow-none hover:bg-foreground w-20"
-                      >
-                        {creationLoading ? <LoaderCircle className="animate-spin" /> : 'create'}
-                      </Button>
+                      <div className="flex md:flex-row flex-col gap-y-3 gap-x-3 md:items-center">
+                        <Button
+                          type={'submit'}
+                          disabled={!unableToCreate || creationLoading}
+                          className="rounded-none shadow-none hover:bg-foreground w-20"
+                        >
+                          {creationLoading ? <LoaderCircle className="animate-spin" /> : 'create'}
+                        </Button>
+                        {!unableToCreate && (
+                          <p className="text-muted-foreground flex h-auto flex-col gap-y-0 text-[12.8px] lowercase tracking-tighter font-normal">
+                            please fill in all the particle data.
+                          </p>
+                        )}
+                      </div>
+
                       {(creationLoading || signatures.combinedVelocity) && (
                         <p className="text-muted-foreground flex h-auto flex-col gap-y-0 text-[12.8px] lowercase tracking-tighter font-normal">
                           please note that the model still outputs non-consistents results.
                           <br />
-                          generation might take a few seconds.
+                          generation might take some time depending on the chosen parameters.
                         </p>
                       )}
                     </div>
@@ -547,6 +586,14 @@ export default function Create() {
                           {i !== signatures.signatures.length - 1 && <hr />}
                         </div>
                       ))}
+                      <Button
+                        onClick={shareCurrentConfiguration}
+                        variant={'secondary'}
+                        type={'button'}
+                        className="shadow-none border w-60 hover:bg-background bg-background rounded-none disabled:cursor-not-allowed"
+                      >
+                        share current configuration
+                      </Button>
                     </div>
                   </div>
                 </div>
