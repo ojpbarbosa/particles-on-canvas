@@ -42,8 +42,8 @@ export default function Create() {
   const [signatures, setSignatures] = useState({} as Signatures)
 
   const [query, setQuery] = useQueryParams({
-    width: withDefault(StringParam, '512'),
-    height: withDefault(StringParam, '512'),
+    width: withDefault(StringParam, '256'),
+    height: withDefault(StringParam, '256'),
     images: withDefault(StringParam, '1'),
     alpha: withDefault(BooleanParam, false),
     symmetry: withDefault(BooleanParam, false),
@@ -134,6 +134,14 @@ export default function Create() {
     }
 
     setQuery({ ...query, [name]: value })
+  }
+
+  const strategyToColor: { [key: string]: string } = {
+    bw: 'Black and White',
+    rgb: 'Red, Green, Blue',
+    cmyk: 'Cyan, Magenta, Yellow, Black',
+    hsv: 'Hue, Saturation, Value',
+    hsl: 'Hue, Saturation, Lightness'
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -481,12 +489,14 @@ export default function Create() {
               </form>
               {signatures.combinedVelocity && (
                 <div className="flex flex-col gap-y-6">
-                  <div className="flex flex-col md:flex-row gap-x-2 gap-y-4 md:max-w-52 max-w-full">
-                    <div className="space-y-1 min-w-20">
+                  <div className="flex flex-col md:flex-row gap-x-8 gap-y-4 md:max-w-52 max-w-full">
+                    <div className="space-y-1 min-w-32">
                       <p className="text-sm text-muted-foreground">strategy</p>
-                      <p className="text-sm font-semibold tracking-tight">{signatures.strategy}</p>
+                      <p className="text-sm font-semibold tracking-tight lowercase">
+                        {strategyToColor[signatures.strategy]}
+                      </p>
                     </div>
-                    <div className="space-y-1 min-w-40">
+                    <div className="space-y-1 min-w-32">
                       <p className="text-sm text-muted-foreground">combined velocity</p>
                       <p className="text-sm font-semibold tracking-tight">
                         {signatures.combinedVelocity}
