@@ -1,6 +1,5 @@
 import numpy as np
 import torch
-from multiprocessing import Pool
 
 
 def hsv_to_rgb(hue: float, saturation: float, value: float) -> tuple:
@@ -72,53 +71,9 @@ def hsv_to_rgb_torch(image: torch.Tensor) -> torch.Tensor:
     return torch.cat([r_select, g_select, b_select], dim=-1)
 
 
-def hsl_to_rgb(h: float, s: float, l: float) -> tuple:
-    """
-    Convert HSL color space to RGB color space.
-
-    Parameters
-    ----------
-    h : float
-        Hue component of the color, must be in the range [0, 1].
-    s : float
-        Saturation component of the color, must be in the range [0, 1].
-    l : float
-        Lightness component of the color, must be in the range [0, 1].
-
-    Returns
-    -------
-    tuple
-        The RGB representation of the color as a tuple (r, g, b), each in the range [0, 1].
-    """
-    if s == 0:
-        # achromatic (grey)
-        r = g = b = l
-    else:
-        def hue_to_rgb(p, q, t):
-            if t < 0:
-                t += 1
-            if t > 1:
-                t -= 1
-            if t < 1 / 6:
-                return p + (q - p) * 6 * t
-            if t < 1 / 2:
-                return q
-            if t < 2 / 3:
-                return p + (q - p) * (2 / 3 - t) * 6
-            return p
-
-        q = l * (1 + s) if l < 0.5 else l + s - l * s
-        p = 2 * l - q
-        r = hue_to_rgb(p, q, h + 1/3)
-        g = hue_to_rgb(p, q, h)
-        b = hue_to_rgb(p, q, h - 1/3)
-
-    return (r, g, b)
-
-
 def hsl_to_rgb_torch(h: torch.Tensor, s: torch.Tensor, l: torch.Tensor) -> torch.Tensor:
     """
-    Convert an HSL image to RGB format using tensors.
+    Convert an HSL image to RGB format using PyTorch.
 
     Parameters
     ----------
@@ -134,11 +89,37 @@ def hsl_to_rgb_torch(h: torch.Tensor, s: torch.Tensor, l: torch.Tensor) -> torch
     torch.Tensor
         The image tensor in RGB format.
     """
-    _h = h.cpu().data.numpy()
-    _s = s.cpu().data.numpy()
-    _l = l.cpu().data.numpy()
+    c = (1 - torch.abs(2 * l - 1)) * s
+    x = c * (1 - torch.abs((h * 6) % 2 - 1))
+    m = l - c / 2
 
-    with Pool(processes=3) as pool:
-        rgb_values = pool.starmap(hsl_to_rgb, zip(_h, _s, _l))
+    r = torch.zeros_like(h)
+    g = torch.zeros_like(h)
+    b = torch.zeros_like(h)
 
-    return torch.Tensor(rgb_values)
+    # red dominant segment segment
+    mask = (0 <= h) & (h < 1/6)
+    r[mask], g[mask], b[mask] = c[mask] + m[mask], x[mask] + m[mask], m[mask]
+
+    # Yellow dominant segment
+    mask = (1/6 <= h) & (h < 1/3)
+    r[mask], g[mask], b[mask] = x[mask] + m[mask], c[mask] + m[mask], m[mask]
+
+    # green dominant segment
+    mask = (1/3 <= h) & (h < 1/2)
+    r[mask], g[mask], b[mask] = m[mask], c[mask] + m[mask], x[mask] + m[mask]
+
+    # cyan dominant segment
+    mask = (1/2 <= h) & (h < 2/3)
+    r[mask], g[mask], b[mask] = m[mask], x[mask] + m[mask], c[mask] + m[mask]
+
+    # blue dominant segment
+    mask = (2/3 <= h) & (h < 5/6)
+    r[mask], g[mask], b[mask] = x[mask] + m[mask], m[mask], c[mask] + m[mask]
+
+    # magenta dominant segment
+    mask = (5/6 <= h) & (h < 1)
+    r[mask], g[mask], b[mask] = c[mask] + m[mask], m[mask], x[mask] + m[mask]
+
+    rgb = torch.stack((r, g, b), dim=-1)
+    return rgb

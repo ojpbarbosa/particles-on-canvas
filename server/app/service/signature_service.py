@@ -28,11 +28,11 @@ class SignatureService:
         color_weights = {
             'proton': 'bw',
             'kaon': 'rgb',
-            'pion': 'hsl',
+            'pion': 'cmyk',
             'electron': 'hsv'
         }
 
-        color_totals = {'bw': 0, 'rgb': 0, 'hsv': 0, 'hsl': 0}
+        color_totals = {'bw': 0, 'rgb': 0, 'hsv': 0, 'cmyk': -10}
 
         combined_velocity = 0
 
