@@ -58,13 +58,20 @@ export default function SignaturesView({
       JSON.stringify({
         combinedVelocity,
         layerDimensions,
-        strategy,
-        signatures: signatures.signatures.map(({ image, seed }) => ({
-          image,
-          seed
-        }))
+        strategy
       })
     )
+
+    localStorage.setItem('__poc_creation_signatures_count', signatures.signatures.length.toString())
+    signatures.signatures.forEach((signature, i) => {
+      localStorage.setItem(
+        `__poc_creation_signature_${i}`,
+        JSON.stringify({
+          image: signature.image,
+          seed: signature.seed
+        })
+      )
+    })
 
     localStorage.setItem('__poc_creation_query', queryParams)
     localStorage.setItem('__poc_creation_data', JSON.stringify(creationData))

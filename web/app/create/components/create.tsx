@@ -36,6 +36,7 @@ const ACTIVATION_FUNCTIONS = ['tanh', 'sigmoid', 'relu', 'softsign', 'sin', 'cos
 
 const MAX_WIDTH_HEIGHT = 756
 const MIN_WIDTH_HEIGHT = 64
+const MAX_IMAGES = 10
 
 export default function Create() {
   const initialParticleData: ParticleData = {
@@ -125,12 +126,12 @@ export default function Create() {
         value = '256'
       }
     } else if (name === 'images') {
-      if (parseInt(value) > 10) {
-        value = '10'
+      if (parseInt(value) > MAX_IMAGES) {
+        value = `${MAX_IMAGES}`
 
         toast({
           className: 'rounded-none p-2',
-          description: 'maximum images is 10!'
+          description: `maximum images is ${MAX_IMAGES}!`
         })
       } else if (parseInt(value) < 1) {
         value = '1'
@@ -278,7 +279,7 @@ export default function Create() {
                                     images === '1' && 'text-muted-foreground'
                                   )}
                                   min={1}
-                                  max={10}
+                                  max={MAX_IMAGES}
                                   value={images}
                                   onChange={handleConfigurationChange}
                                   onBlur={validateValue}

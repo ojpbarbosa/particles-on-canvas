@@ -74,9 +74,21 @@ export default function Contact() {
   const supabase = createClient()
 
   useEffect(() => {
+    const signatures: { image: string; seed: string }[] = []
+
+    const signaturesCount = localStorage.getItem('__poc_creation_signatures_count')
+    if (signaturesCount) {
+      for (let i = 0; i < parseInt(signaturesCount); i++) {
+        const signature = localStorage.getItem(`__poc_creation_signature_${i}`)
+        if (signature) {
+          signatures.push(JSON.parse(signature))
+        }
+      }
+    }
+
     const creation = localStorage.getItem('__poc_new_creation')
     if (creation) {
-      setNewCreation(JSON.parse(creation))
+      setNewCreation({ ...JSON.parse(creation), signatures })
     }
 
     const query = localStorage.getItem('__poc_creation_query')
