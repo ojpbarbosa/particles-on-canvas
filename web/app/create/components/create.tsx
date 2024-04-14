@@ -1,8 +1,10 @@
 'use client'
 
 import type { ChangeEvent } from 'react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { LoaderCircle } from 'lucide-react'
+import { BooleanParam, JsonParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 
 import Layout from '@/components/layout'
 import { Button } from '@/components/ui/button'
@@ -10,54 +12,76 @@ import ParticleDataInput from './particle-data-input'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from '@/components/ui/accordion'
+import Combobox from './particle-data-input/combobox'
+import { Checkbox } from '@/components/ui/checkbox'
+import { toast } from '@/components/ui/use-toast'
 
 export type ParticleData = {
   particle: string
   velocity: string
-  timestamp: number
 }
 
 const PARTICLES = ['electron', 'proton', 'kaon', 'pion']
+const ACTIVATION_FUNCTIONS = ['tanh', 'sigmoid', 'relu', 'softsign', 'sin', 'cos']
 
 export default function Create() {
   const initialParticleData: ParticleData = {
     particle: '',
-    velocity: '0',
-    timestamp: new Date().getTime()
+    velocity: '1'
+    // todo: handle priority and explain it in the form
   }
 
-  const [particleDataInputs, setParticleDataInputs] = useState([initialParticleData])
-  const [configuration, setConfiguration] = useState({
-    width: '512',
-    height: '512',
-    images: '1',
-    alphaChannel: false
+  const [query, setQuery] = useQueryParams({
+    width: withDefault(StringParam, '512'),
+    height: withDefault(StringParam, '512'),
+    images: withDefault(StringParam, '1'),
+    alpha: withDefault(BooleanParam, false),
+    symmetry: withDefault(BooleanParam, false),
+    trig: withDefault(BooleanParam, false),
+    noise: withDefault(BooleanParam, false),
+    activation: withDefault(StringParam, 'tanh'),
+    particleDataInputs: withDefault(JsonParam, [
+      {
+        particle: '',
+        velocity: '1'
+      }
+    ])
   })
+
+  const { width, height, images, alpha, symmetry, trig, noise, activation, particleDataInputs } =
+    query
+
+  const [unableToCreate, setUnableToCreate] = useState(false)
+  const [creationLoading, setCreationLoading] = useState(false)
 
   function setParticleData(index: number, field: string, value: string) {
     const newData = [...particleDataInputs]
     newData[index] = { ...newData[index], [field]: value }
-    setParticleDataInputs(newData)
+    setQuery({ ...query, particleDataInputs: newData })
   }
 
   function addParticleDataInput() {
     if (particleDataInputs.length < PARTICLES.length) {
-      setParticleDataInputs([
-        ...particleDataInputs,
-        { particle: '', velocity: '1', timestamp: new Date().getTime() }
-      ])
+      const newEntry = { particle: '', velocity: '1' }
+      const newData = [...particleDataInputs, newEntry]
+      setQuery({ ...query, particleDataInputs: newData })
     }
   }
-
   function removeParticleDataInput(index: number) {
     const newData = [...particleDataInputs]
     newData.splice(index, 1)
-    setParticleDataInputs(newData)
+    setQuery({ ...query, particleDataInputs: newData })
   }
 
   function getAvailableParticles() {
     return PARTICLES.filter(
-      (particle) => !particleDataInputs.some((data) => data.particle === particle)
+      (particle) => !particleDataInputs.some((data: ParticleData) => data.particle === particle)
     )
   }
 
@@ -79,8 +103,43 @@ export default function Create() {
       }
     }
 
-    setConfiguration({ ...configuration, [name]: value })
+    setQuery({ ...query, [name]: value })
   }
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    try {
+      setCreationLoading(true)
+      const body = {
+        width: parseInt(width),
+        height: parseInt(height),
+        images: parseInt(images),
+        alpha,
+        symmetry,
+        trig,
+        noise,
+        activation,
+        particles: particleDataInputs
+      }
+
+      console.log(body)
+    } catch {
+      setCreationLoading(false)
+      toast({
+        variant: 'destructive',
+        className: 'rounded-none p-2',
+        description: 'an error occurred, please try again!'
+      })
+    }
+  }
+
+  useEffect(() => {
+    const isValidInput = particleDataInputs.every(
+      (input: ParticleData) => PARTICLES.includes(input.particle) && input.velocity !== ''
+    )
+    setUnableToCreate(isValidInput)
+  }, [particleDataInputs])
 
   return (
     <Layout className="h-full w-full">
@@ -103,9 +162,12 @@ export default function Create() {
                   to better understand how the data is used to create an experiment signature.
                 </p>
               </div>
-              <div className="flex w-full items-start gap-y-4 justify-center flex-col">
+              <form
+                onSubmit={handleSubmit}
+                className="flex w-full items-start gap-y-4 justify-center flex-col"
+              >
                 <div className="space-y-8 w-full">
-                  {particleDataInputs.map((data, i) => (
+                  {particleDataInputs.map((data: ParticleData, i: number) => (
                     <div key={`particle-input-${i}`} className="space-y-8">
                       <div className="space-y-2 flex flex-col items-end">
                         <ParticleDataInput
@@ -145,7 +207,7 @@ export default function Create() {
                   <hr className="w-full" />
                   <div className="w-full flex flex-col items-start gap-y-6">
                     <div className="flex w-full flex-col gap-y-6">
-                      <div className="flex w-full min-w-64 flex-row gap-x-4">
+                      <div className="flex w-full min-w-64 flex-col gap-y-4">
                         <div className="flex w-full flex-col justify-start items-start gap-x-4 gap-y-6 md:flex-row">
                           <div className="w-full md:max-w-[200px]">
                             <div className="flex flex-col w-full gap-y-3 items-start justify-center">
@@ -156,11 +218,11 @@ export default function Create() {
                                   type="number"
                                   className={cn(
                                     'rounded-none shadow-none w-20',
-                                    configuration.images === '1' && 'text-muted-foreground'
+                                    images === '1' && 'text-muted-foreground'
                                   )}
                                   min={1}
                                   max={10}
-                                  value={configuration.images}
+                                  value={images}
                                   onChange={handleConfigurationChange}
                                 />
                                 <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
@@ -178,11 +240,11 @@ export default function Create() {
                                   type="number"
                                   className={cn(
                                     'rounded-none shadow-none w-20',
-                                    configuration.width === '512' && 'text-muted-foreground'
+                                    width === '512' && 'text-muted-foreground'
                                   )}
                                   min={64}
                                   max={2048}
-                                  value={configuration.width}
+                                  value={width}
                                   onChange={handleConfigurationChange}
                                 />
                                 <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
@@ -200,11 +262,11 @@ export default function Create() {
                                   type="number"
                                   className={cn(
                                     'rounded-none shadow-none w-20',
-                                    configuration.height === '512' && 'text-muted-foreground'
+                                    height === '512' && 'text-muted-foreground'
                                   )}
                                   min={64}
                                   max={2048}
-                                  value={configuration.height}
+                                  value={height}
                                   onChange={handleConfigurationChange}
                                 />
                                 <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
@@ -214,18 +276,162 @@ export default function Create() {
                             </div>
                           </div>
                         </div>
+                        <Accordion type="single" collapsible className="w-full">
+                          <AccordionItem value="accordion-nerd-options">
+                            <AccordionTrigger className="underline-offset-4">
+                              nerd options (optional)
+                            </AccordionTrigger>
+                            <AccordionContent className="flex flex-col md:gap-y-6">
+                              <div className="flex md:flex-row pt-2 flex-col gap-y-6 gap-x-4">
+                                <div className="flex max-w-52 flex-col gap-y-3">
+                                  <div className="flex flex-row gap-x-2">
+                                    <Checkbox
+                                      className="rounded-none"
+                                      name="symmetry"
+                                      checked={symmetry}
+                                      onClick={() =>
+                                        setQuery({
+                                          ...query,
+                                          symmetry: !symmetry
+                                        })
+                                      }
+                                    />
+                                    <Label
+                                      className="font-normal cursor-pointer"
+                                      onClick={() =>
+                                        setQuery({
+                                          ...query,
+                                          symmetry: !symmetry
+                                        })
+                                      }
+                                    >
+                                      symmetry
+                                    </Label>
+                                  </div>
+                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                                    whether the generated images should be symmetrical
+                                  </p>
+                                </div>
+                                <div className="flex max-w-52 flex-col gap-y-3">
+                                  <div className="flex flex-row gap-x-2">
+                                    <Checkbox
+                                      className="rounded-none"
+                                      name="alpha"
+                                      checked={alpha}
+                                      onClick={() =>
+                                        setQuery({
+                                          ...query,
+                                          alpha: !alpha
+                                        })
+                                      }
+                                    />
+                                    <Label
+                                      className="font-normal cursor-pointer"
+                                      onClick={() =>
+                                        setQuery({
+                                          ...query,
+                                          alpha: !alpha
+                                        })
+                                      }
+                                    >
+                                      alpha
+                                    </Label>
+                                  </div>
+                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                                    whether the generated images should have an alpha channel
+                                  </p>
+                                </div>
+                                <div className="flex max-w-52 flex-col gap-y-3">
+                                  <div className="flex flex-row gap-x-2">
+                                    <Checkbox
+                                      className="rounded-none"
+                                      name="trig"
+                                      checked={trig}
+                                      onClick={() =>
+                                        setQuery({
+                                          ...query,
+                                          trig: !trig
+                                        })
+                                      }
+                                    />
+                                    <Label
+                                      className="font-normal cursor-pointer"
+                                      onClick={() =>
+                                        setQuery({
+                                          ...query,
+                                          trig: !trig
+                                        })
+                                      }
+                                    >
+                                      trig
+                                    </Label>
+                                  </div>
+                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                                    whether the neural network should use trigonometric
+                                    transformations
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex md:flex-row flex-col pt-6 md:pt-0 gap-y-6 gap-x-4">
+                                <div className="flex max-w-52 flex-col gap-y-3">
+                                  <div className="flex flex-row gap-x-2">
+                                    <Checkbox
+                                      className="rounded-none"
+                                      name="noise"
+                                      checked={noise}
+                                      onClick={() =>
+                                        setQuery({
+                                          ...query,
+                                          noise: !noise
+                                        })
+                                      }
+                                    />
+                                    <Label
+                                      className="font-normal cursor-pointer"
+                                      onClick={() =>
+                                        setQuery({
+                                          ...query,
+                                          noise: !noise
+                                        })
+                                      }
+                                    >
+                                      noise
+                                    </Label>
+                                  </div>
+                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                                    whether to apply gaussian noise to the neural network input
+                                  </p>
+                                </div>
+                                <div className="flex max-w-52 flex-col gap-y-3">
+                                  <Label className="font-normal">activation function</Label>
+                                  <Combobox
+                                    attributes={ACTIVATION_FUNCTIONS}
+                                    attributeName="activation"
+                                    value={activation}
+                                    onChange={(value) => setQuery({ ...query, activation: value })}
+                                    className="rounded-none w-[140px]"
+                                  />
+                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                                    which activation function the neural network should use to
+                                    generate the images
+                                  </p>
+                                </div>
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
                       </div>
                     </div>
                     <Button
                       type={'submit'}
-                      disabled
-                      className="rounded-none shadow-none cursor-progress hover:bg-foreground"
+                      disabled={!unableToCreate || creationLoading}
+                      className="rounded-none shadow-none hover:bg-foreground w-20"
                     >
-                      create (coming soon)
+                      {creationLoading ? <LoaderCircle className="animate-spin" /> : 'create'}
                     </Button>
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
           </article>
         </main>
