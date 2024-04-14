@@ -227,7 +227,7 @@ export default function Contact() {
               <div className="flex flex-col w-full gap-y-8 md:pl-24">
                 <div className="flex flex-col w-full gap-y-2">
                   <h4 className="text-lg font-semibold tracking-tight sm:text-xl xl:text-2xl">
-                    save your signatures to community gallery
+                    save your signatures to community creations
                   </h4>
                   <p className="text-sm text-muted-foreground tracking-tight">
                     fill in the form bellow to save your creations.
@@ -333,7 +333,7 @@ export default function Contact() {
                             </Label>
                           </div>
                           <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
-                            wheter your signatures will be public listed
+                            whether your signatures will be public listed
                           </p>
                         </div>
                       </div>
