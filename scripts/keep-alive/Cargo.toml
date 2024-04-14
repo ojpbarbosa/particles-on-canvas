@@ -1,0 +1,9 @@
+[package]
+name = "particles-on-canvas-keep-alive"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chrono = "0.4.37"
+reqwest = { verison = "0.12.3", features = ["json"] }
+tokio = { version = "1.37.0", features = ["full"] }
