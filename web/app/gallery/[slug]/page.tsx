@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import Signature from './components/singature'
+import Signature from './components/signature'
 import { getSignatures } from '@/lib/content'
 
 export const dynamic = 'force-static'

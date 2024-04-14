@@ -51,7 +51,8 @@ export const getContent = cache(async () => {
 
 export const getPaper = async () => (await getContent()).find((content) => content.kind === 'paper')
 
-export const getAbout = async () => (await getContent()).find((content) => content.kind === 'about')
+export const getMission = async () =>
+  (await getContent()).find((content) => content.kind === 'mission')
 
 export const getSignatures = async () =>
   (await getContent()).filter((content) => content.kind === 'gallery')

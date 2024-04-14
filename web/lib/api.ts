@@ -15,7 +15,7 @@ type CreateSignaturesBody = {
 }
 
 export type Signatures = {
-  combinedVelocity: string
+  combinedVelocity: number
   layerDimensions: number[]
   signatures: {
     image: string

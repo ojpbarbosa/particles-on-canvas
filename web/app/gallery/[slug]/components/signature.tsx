@@ -42,7 +42,7 @@ export default async function Signature({ slug }: SignatureProps) {
               <p className="text-sm font-semibold tracking-tight">{signature.particles}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">dimesions</p>
+              <p className="text-sm text-muted-foreground">dimensions</p>
               <p className="text-sm font-semibold tracking-tight">{signature.resolution}</p>
             </div>
             <Link href={signature.image} className="w-40">
@@ -50,7 +50,7 @@ export default async function Signature({ slug }: SignatureProps) {
                 className="dark:border-muted px-4 shadow-none bg-background hover:bg-background flex h-9 items-center justify-start gap-x-2 rounded-none border border-neutral-200"
                 variant={'secondary'}
               >
-                view raw image
+                view image source
                 <ExternalLink height={16} width={16} />
               </Button>
             </Link>
@@ -59,7 +59,7 @@ export default async function Signature({ slug }: SignatureProps) {
               <p className="text-sm text-muted-foreground tracking-tight break-words">{seed}</p>
             </div>
           </div>
-          <article className="flex w-full flex-col items-start gap-y-4 pb-10 md:w-[40rem] lg:w-[50rem]">
+          <article className="flex w-full flex-col items-start gap-y-4 md:pb-10 md:w-[40rem] lg:w-[50rem]">
             <Image src={signature.image} alt={signature.name} width={512} height={512} />
           </article>
         </main>

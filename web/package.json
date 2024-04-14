@@ -1,6 +1,6 @@
 {
   "name": "@particles-on-canvas/web",
-  "version": "0.1.1",
+  "version": "1.0.0-alpha",
   "private": true,
   "scripts": {
     "build": "next build",

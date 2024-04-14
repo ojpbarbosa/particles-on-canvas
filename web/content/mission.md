@@ -6,6 +6,6 @@ Each piece in our collection captures the essence and complexity of particle phy
 
 By becoming a museum and open site, Particles on Canvas has broadened its reach, inviting people from all walks of life to explore the marvels of physics through the lens of art. It's a place where curiosity is ignited, and the abstract world of particle physics is made tangible and relatable.
 
-Our platform serves as a vital educational tool, promoting science and the arts within academic institutions and beyond. It fosters a comprehensive understanding of our environment and stimulates creative solutions to complex problems, thereby contributing to the constant evolution of both art and science.
+Promoting science and the arts within academic institutions and beyond, we are fostering a comprehensive understanding of our environment and stimulates creative solutions to complex problems, thereby contributing to the constant evolution of both art and science.
 
-We are immensely thankful for how far we've come and excited about the future of Particles on Canvas. As we continue to grow and evolve, our commitment remains steadfast—to inspire, educate, and engage audiences around the globe by showcasing the true beauty of physics through the universal language of art.
+As we continue to grow and evolve, our commitment remains steadfast—to inspire, educate, and engage audiences around the globe by showcasing the true beauty of physics through the universal language of art.

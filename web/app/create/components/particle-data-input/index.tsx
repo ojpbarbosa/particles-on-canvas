@@ -55,7 +55,7 @@ export default function ParticleDataInput({
                 onChange={handleParticleChange}
                 className="rounded-none"
               />
-              <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+              <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                 more types might be added in the future{' '}
               </p>
             </div>
@@ -74,7 +74,7 @@ export default function ParticleDataInput({
                 onChange={handleVelocityChange}
                 onBlur={validateValue}
               />
-              <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+              <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                 cm per ps
               </p>
             </div>
@@ -86,7 +86,7 @@ export default function ParticleDataInput({
               </Label>
               <Input type="file" disabled className="rounded-none shadow-none" />
 
-              <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+              <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                 allowed file types: .csv, .npy
               </p>
             </div>

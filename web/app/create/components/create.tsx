@@ -4,10 +4,8 @@
 import type { ChangeEvent, FocusEvent } from 'react'
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ExternalLink, LoaderCircle } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 import { BooleanParam, JsonParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import copy from 'clipboard-copy'
-import { usePathname, useSearchParams } from 'next/navigation'
 
 import Layout from '@/components/layout'
 import { Button } from '@/components/ui/button'
@@ -25,6 +23,7 @@ import Combobox from './particle-data-input/combobox'
 import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from '@/components/ui/use-toast'
 import { type Signatures, createSignatures } from '@/lib/api'
+import SignaturesView from '@/app/components/signatures-view'
 
 export type ParticleData = {
   particle: string
@@ -35,6 +34,9 @@ export type ParticleData = {
 const PARTICLES = ['electron', 'proton', 'kaon', 'pion']
 const ACTIVATION_FUNCTIONS = ['tanh', 'sigmoid', 'relu', 'softsign', 'sin', 'cos']
 
+const MAX_WIDTH_HEIGHT = 756
+const MIN_WIDTH_HEIGHT = 64
+
 export default function Create() {
   const initialParticleData: ParticleData = {
     particle: '',
@@ -43,8 +45,8 @@ export default function Create() {
   }
 
   const [signatures, setSignatures] = useState({} as Signatures)
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [creationData, setCreationData] = useState({} as any)
 
   const [query, setQuery] = useQueryParams({
     width: withDefault(StringParam, '256'),
@@ -105,19 +107,19 @@ export default function Create() {
     let { name, value } = event.target
 
     if (name === 'width' || name === 'height') {
-      if (parseInt(value) > 2048) {
-        value = '2048'
+      if (parseInt(value) > MAX_WIDTH_HEIGHT) {
+        value = `${MAX_WIDTH_HEIGHT}`
 
         toast({
           className: 'rounded-none p-2',
-          description: 'maximum width and height is 2048!'
+          description: `maximum width and height is ${MAX_WIDTH_HEIGHT}!`
         })
-      } else if (parseInt(value) < 64) {
-        value = '256'
+      } else if (parseInt(value) < MIN_WIDTH_HEIGHT) {
+        value = `${MIN_WIDTH_HEIGHT}`
 
         toast({
           className: 'rounded-none p-2',
-          description: 'minimum width and height is 64!'
+          description: `minimum width and height is ${MIN_WIDTH_HEIGHT}!`
         })
       } else if (!value) {
         value = '256'
@@ -145,19 +147,14 @@ export default function Create() {
     setQuery({ ...query, [name]: value })
   }
 
-  const strategyToColor: { [key: string]: string } = {
-    bw: 'Black and White',
-    rgb: 'Red, Green, Blue',
-    cmyk: 'Cyan, Magenta, Yellow, Black',
-    hsv: 'Hue, Saturation, Value',
-    hsl: 'Hue, Saturation, Lightness'
-  }
-
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     try {
       setCreationLoading(true)
+
+      localStorage.setItem('__poc_creation_query', location.search)
+
       const body = {
         width: parseInt(width),
         height: parseInt(height),
@@ -169,32 +166,18 @@ export default function Create() {
         activation,
         particles: particleDataInputs.map((input: ParticleData) => ({
           particle: input.particle,
-          velocity: parseInt(input.velocity)
+          velocity: parseInt(input.velocity),
+          priority: parseInt(input.priority)
         }))
       }
+
+      setCreationData(body)
 
       setSignatures(await createSignatures(body))
 
       setCreationLoading(false)
     } catch {
       setCreationLoading(false)
-      toast({
-        variant: 'destructive',
-        className: 'rounded-none p-2',
-        description: 'an error occurred, please try again!'
-      })
-    }
-  }
-
-  async function shareCurrentConfiguration() {
-    try {
-      await copy(`https://particles-on-canvas.vercel.app${pathname}?${searchParams.toString()}`)
-
-      toast({
-        className: 'rounded-none p-2',
-        description: 'link copied to clipboard!'
-      })
-    } catch {
       toast({
         variant: 'destructive',
         className: 'rounded-none p-2',
@@ -247,7 +230,7 @@ export default function Create() {
                           particleData={data}
                           setParticleData={setParticleData}
                         />
-                        <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                        <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                           priority #{data.priority}
                         </p>
                         {i !== 0 && (
@@ -300,7 +283,7 @@ export default function Create() {
                                   onChange={handleConfigurationChange}
                                   onBlur={validateValue}
                                 />
-                                <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                                <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                                   how many images will be created
                                 </p>
                               </div>
@@ -317,13 +300,13 @@ export default function Create() {
                                     'rounded-none shadow-none w-20',
                                     width === '256' && 'text-muted-foreground'
                                   )}
-                                  min={64}
-                                  max={2048}
+                                  min={MIN_WIDTH_HEIGHT}
+                                  max={MAX_WIDTH_HEIGHT}
                                   value={width}
                                   onChange={handleConfigurationChange}
                                   onBlur={validateValue}
                                 />
-                                <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                                <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                                   final image width (px)
                                 </p>
                               </div>
@@ -340,13 +323,13 @@ export default function Create() {
                                     'rounded-none shadow-none w-20',
                                     height === '256' && 'text-muted-foreground'
                                   )}
-                                  min={64}
-                                  max={2048}
+                                  min={MIN_WIDTH_HEIGHT}
+                                  max={MAX_WIDTH_HEIGHT}
                                   value={height}
                                   onChange={handleConfigurationChange}
                                   onBlur={validateValue}
                                 />
-                                <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                                <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                                   final image height (px)
                                 </p>
                               </div>
@@ -385,7 +368,7 @@ export default function Create() {
                                       symmetry
                                     </Label>
                                   </div>
-                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                                     whether the generated images should be symmetrical
                                   </p>
                                 </div>
@@ -414,7 +397,7 @@ export default function Create() {
                                       alpha
                                     </Label>
                                   </div>
-                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                                     whether the generated images should have an alpha channel
                                   </p>
                                 </div>
@@ -443,7 +426,7 @@ export default function Create() {
                                       trig
                                     </Label>
                                   </div>
-                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                                     whether the neural network should use trigonometric
                                     transformations
                                   </p>
@@ -475,7 +458,7 @@ export default function Create() {
                                       noise
                                     </Label>
                                   </div>
-                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                                     whether to apply gaussian noise to the neural network input
                                   </p>
                                 </div>
@@ -488,7 +471,7 @@ export default function Create() {
                                     onChange={(value) => setQuery({ ...query, activation: value })}
                                     className="rounded-none w-[140px]"
                                   />
-                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal">
+                                  <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                                     which activation function the neural network should use to
                                     generate the images
                                   </p>
@@ -516,7 +499,7 @@ export default function Create() {
                       </div>
 
                       {(creationLoading || signatures.combinedVelocity) && (
-                        <p className="text-muted-foreground flex h-auto flex-col gap-y-0 text-[12.8px] lowercase tracking-tighter font-normal">
+                        <p className="text-muted-foreground flex h-auto flex-col gap-y-0 text-[12.8px] leading-5 lowercase tracking-tighter font-normal">
                           please note that the model still outputs non-consistents results.
                           <br />
                           generation might take some time depending on the chosen parameters.
@@ -527,76 +510,11 @@ export default function Create() {
                 </div>
               </form>
               {signatures.combinedVelocity && (
-                <div className="flex flex-col gap-y-6">
-                  <div className="flex flex-col md:flex-row gap-x-8 gap-y-4 md:max-w-52 max-w-full">
-                    <div className="space-y-1 min-w-32">
-                      <p className="text-sm text-muted-foreground">strategy</p>
-                      <p className="text-sm font-semibold tracking-tight lowercase">
-                        {strategyToColor[signatures.strategy]}
-                      </p>
-                    </div>
-                    <div className="space-y-1 min-w-32">
-                      <p className="text-sm text-muted-foreground">combined velocity</p>
-                      <p className="text-sm font-semibold tracking-tight">
-                        {signatures.combinedVelocity}
-                      </p>
-                    </div>
-                    <div className="space-y-1 min-w-52">
-                      <p className="text-sm text-muted-foreground">layer dimensions</p>
-                      <p className="text-sm font-semibold tracking-tight">
-                        <span className="text-muted-foreground">[</span>
-                        {signatures.layerDimensions.join(', ')}
-                        <span className="text-muted-foreground">]</span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="w-full flex flex-col gap-y-4">
-                    <p className="text-sm text-muted-foreground">signatures</p>
-                    <div className="flex flex-col gap-y-6">
-                      {signatures.signatures.map(({ image, seed }, i) => (
-                        <div key={seed} className="flex flex-col gap-y-8">
-                          <div className="flex items-start flex-col gap-y-4">
-                            <img
-                              className="max-w-full max-h-full"
-                              src={`data:image/png;base64,${image}`}
-                            />
-                            <div className="w-full flex flex-col gap-y-3">
-                              <Link
-                                target="_blank"
-                                referrerPolicy="no-referrer"
-                                href={`data:image/png;base64,${image}`}
-                                className="w-40"
-                              >
-                                <Button
-                                  className="dark:border-muted px-4 shadow-none bg-background hover:bg-background flex h-9 items-center justify-start gap-x-2 rounded-none border border-neutral-200"
-                                  variant={'secondary'}
-                                >
-                                  view raw image
-                                  <ExternalLink height={16} width={16} />
-                                </Button>
-                              </Link>
-                              <div className="space-y-1">
-                                <p className="text-sm text-muted-foreground">seed</p>
-                                <p className="text-sm text-muted-foreground tracking-tight break-words">
-                                  {seed}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                          {i !== signatures.signatures.length - 1 && <hr />}
-                        </div>
-                      ))}
-                      <Button
-                        onClick={shareCurrentConfiguration}
-                        variant={'secondary'}
-                        type={'button'}
-                        className="shadow-none border w-60 hover:bg-background bg-background rounded-none disabled:cursor-not-allowed"
-                      >
-                        share current configuration
-                      </Button>
-                    </div>
-                  </div>
-                </div>
+                <SignaturesView
+                  signatures={signatures}
+                  queryParams={location.search}
+                  creationData={creationData}
+                />
               )}
             </div>
           </article>

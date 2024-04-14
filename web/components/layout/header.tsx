@@ -22,8 +22,12 @@ const links = [
     label: 'create'
   },
   {
-    url: '/about',
-    label: 'about'
+    url: '/creations',
+    label: 'creations'
+  },
+  {
+    url: '/mission',
+    label: 'mission'
   },
   {
     url: '/contact',
