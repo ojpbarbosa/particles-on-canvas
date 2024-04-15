@@ -28,14 +28,23 @@ export default async function Paper() {
           </Link>
           <article className="flex w-full flex-col items-center gap-y-4 pb-10 md:w-[40rem] lg:w-[50rem]">
             <div className="flex flex-col gap-y-2">
-              <h2 className="text-2xl font-semibold tracking-tighter sm:text-3xl xl:text-4xl/none">
-                Particles on Canvas: Creating Digital Art to Further Scientific Divulgation
-              </h2>
+              <h4 className="text-lg font-semibold tracking-tight sm:text-xl xl:text-2xl lowercase">
+                Creating Digital Art to Further Scientific Divulgation
+              </h4>
               <p className="text-muted-foreground text-sm tracking-tight lowercase">
                 a proposal by Beatriz Juliato Coutinho, Éric Carvalho Figueira, Gabriel Willian
                 Bartmanovicz, Hugo Gomes Soares, João Pedro Ferreira Barbosa, Julia Enriquetto de
                 Brito, Marcos Godinho Filho, and Nicolas Militão Livotto, students of Informatics at
-                the Technical High School of Campinas, São Paulo, Brazil, for{' '}
+                the{' '}
+                <Link
+                  href={'https://cotuca.unicamp.br'}
+                  target="_blank"
+                  referrerPolicy="no-referrer"
+                  className="text-[#085fce]/75 hover:text-[#085fce] dark:text-[#04dcd4]/75 hover:dark:text-[#04dcd4] transition-colors duration-100 underline underline-offset-4"
+                >
+                  Technical High School of Campinas
+                </Link>
+                , São Paulo, Brazil, for{' '}
                 <Link
                   href={'https://beamlineforschools.cern'}
                   target="_blank"

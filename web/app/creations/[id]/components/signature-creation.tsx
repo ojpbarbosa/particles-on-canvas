@@ -50,18 +50,24 @@ export default async function SignatureCreation({ id }: SignatureCreationProps) 
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">
                 particles <br />
-                name (velocity, priority)
+                [velocity (cm per ps), priority]
               </p>
-              <div className="text-sm flex flex-col font-semibold tracking-tight">
+              <div className="text-sm flex flex-col gap-y-1 font-semibold tracking-tight">
                 {signature.particles.map((particle, i) => (
-                  <span key={`particle-data-${i}`}>
-                    {particle.particle} ({particle.velocity}, #{particle.priority})
-                  </span>
+                  <p key={`particle-data-${i}`}>
+                    {particle.particle}
+                    <br />
+                    <span className="text-muted-foreground">
+                      [<span className="text-foreground">{particle.velocity}</span> (
+                      {((particle.velocity * 100) / 0.0299792458).toFixed(1)}% of c),{' '}
+                      <span className="text-foreground">#{particle.priority}</span>]
+                    </span>
+                  </p>
                 ))}
               </div>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">dimensions</p>
+              <p className="text-sm text-muted-foreground">dimensions (px)</p>
               <p className="text-sm font-semibold tracking-tight">
                 {signature.width}x{signature.height}
               </p>

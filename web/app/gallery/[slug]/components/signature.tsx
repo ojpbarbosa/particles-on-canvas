@@ -35,14 +35,19 @@ export default async function Signature({ slug }: SignatureProps) {
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">velocity (cm per ps)</p>
-              <p className="text-sm font-semibold tracking-tight">{signature.velocity}</p>
+              <p className="text-sm font-semibold tracking-tight">
+                {signature.velocity}{' '}
+                <span className="text-muted-foreground">
+                  ({((parseFloat(signature.velocity) * 100) / 0.0299792458).toFixed(1)}% of c)
+                </span>
+              </p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">particles</p>
               <p className="text-sm font-semibold tracking-tight">{signature.particles}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">dimensions</p>
+              <p className="text-sm text-muted-foreground">dimensions (px)</p>
               <p className="text-sm font-semibold tracking-tight">{signature.resolution}</p>
             </div>
             <Link href={signature.image} className="w-40">

@@ -15,16 +15,16 @@ const links = [
     label: 'gallery'
   },
   {
-    url: '/paper',
-    label: 'paper'
+    url: '/creations',
+    label: 'creations'
   },
   {
     url: '/create',
     label: 'create'
   },
   {
-    url: '/creations',
-    label: 'creations'
+    url: '/paper',
+    label: 'paper'
   },
   {
     url: '/mission',
@@ -64,7 +64,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row gap-x-8 gap-y-8">
           <div className="flex gap-x-8">
             <div className="flex flex-col gap-y-3">
-              <h4 className="text-sm h-4 font-medium">sections</h4>
+              <h4 className="text-sm h-4 font-medium">navigate</h4>
               <ul className="flex flex-col items-start gap-y-3">
                 {links.map((link, i) => (
                   <li key={`desktop-footer-ref-${i}`}>

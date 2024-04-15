@@ -14,16 +14,16 @@ const links = [
     label: 'gallery'
   },
   {
-    url: '/paper',
-    label: 'paper'
+    url: '/creations',
+    label: 'creations'
   },
   {
     url: '/create',
     label: 'create'
   },
   {
-    url: '/creations',
-    label: 'creations'
+    url: '/paper',
+    label: 'paper'
   },
   {
     url: '/mission',
@@ -50,7 +50,7 @@ export default function Header() {
           >
             PARTICLES ON CANVAS
           </Link>
-          <div className="hidden w-full justify-end md:justify-between sm:flex">
+          <div className="hidden w-full justify-end md:justify-between lg:flex">
             <div className="flex items-center gap-3 sm:gap-6 bg-background px-4">
               {links.map((link, i) => {
                 return (
@@ -71,7 +71,7 @@ export default function Header() {
             </div>
           </div>
 
-          <div className="flex sm:hidden">
+          <div className="flex lg:hidden">
             <Button
               className="bg-transparent border-none shadow-none rounded-none px-2 backdrop-invert z-20"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -90,7 +90,7 @@ export default function Header() {
                 <Link
                   key={`mobile-header-ref-${i}`}
                   className={cn(
-                    'text-muted-foreground flex h-0 items-center text-sm font-normal transition-colors duration-200',
+                    'text-muted-foreground flex hover:text-foreground h-0 items-center text-sm font-normal transition-colors duration-200',
                     (pathname === link.url ||
                       pathname.replace('/', '').toLowerCase().includes(link.label)) &&
                       'text-foreground underline underline-offset-4'
