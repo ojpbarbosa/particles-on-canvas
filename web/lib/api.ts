@@ -52,8 +52,9 @@ async function getService(): Promise<string> {
       return NGROK_SERVICE_URL
     }
 
-    await fetch(`${PRODUCTION_SERVICE_URL}/heartbeat`, {
-      method: 'GET'
+    await fetchWithTimeout(`${PRODUCTION_SERVICE_URL}/heartbeat`, {
+      method: 'GET',
+      timeout: 10 * 60 * 1000
     })
 
     return PRODUCTION_SERVICE_URL
@@ -74,12 +75,13 @@ export async function getServiceType(): Promise<'ngrok' | 'production'> {
 
 export async function createSignatures(body: CreateSignaturesBody): Promise<Signatures> {
   const currentService = await getService()
-  const response = await fetch(`${currentService}/signatures/create`, {
+  const response = await fetchWithTimeout(`${currentService}/signatures/create`, {
     method: 'POST',
     body: JSON.stringify(body),
     headers: {
       'Content-Type': 'application/json'
-    }
+    },
+    timeout: 10 * 1000 * 60
   })
 
   const data = await response.json()
