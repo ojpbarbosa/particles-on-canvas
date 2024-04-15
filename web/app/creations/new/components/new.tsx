@@ -6,6 +6,7 @@ import * as z from 'zod'
 import { useEffect, useState } from 'react'
 import { LoaderCircle } from 'lucide-react'
 import { createClient } from '@/utils/supabase/client'
+import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -23,7 +24,6 @@ import type { Signatures } from '@/lib/api'
 import SignaturesView from '@/app/components/signatures-view'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
-import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
   firstName: z
@@ -62,9 +62,11 @@ const formSchema = z.object({
 })
 
 export default function Contact() {
+  const [mounted, setMounted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [newCreation, setNewCreation] = useState({} as Signatures)
   const [creationQuery, setCreationQuery] = useState('')
+  const [signaturesCount, setSignaturesCount] = useState(0)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [creationData, setCreationData] = useState({} as any)
 
@@ -74,33 +76,46 @@ export default function Contact() {
   const supabase = createClient()
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (mounted) {
     const signatures: { image: string; seed: string }[] = []
 
-    const signaturesCount = localStorage.getItem('__poc_creation_signatures_count')
-    if (signaturesCount) {
-      for (let i = 0; i < parseInt(signaturesCount); i++) {
+    const count = localStorage.getItem('__poc_creation_signatures_count')
+    if (count) {
+      setSignaturesCount(parseInt(count))
+      for (let i = 0; i < parseInt(count); i++) {
         const signature = localStorage.getItem(`__poc_creation_signature_${i}`)
         if (signature) {
           signatures.push(JSON.parse(signature))
         }
       }
+    } else {
+      router.push('/creations')
     }
 
     const creation = localStorage.getItem('__poc_new_creation')
     if (creation) {
       setNewCreation({ ...JSON.parse(creation), signatures })
+    } else {
+      router.push('/creations')
     }
 
     const query = localStorage.getItem('__poc_creation_query')
     if (query) {
       setCreationQuery(query)
+    } else {
+      router.push('/creations')
     }
 
     const data = localStorage.getItem('__poc_creation_data')
     if (data) {
       setCreationData(JSON.parse(data))
+    } else {
+      router.push('/creations')
     }
-  }, [])
+  }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -153,20 +168,6 @@ export default function Contact() {
         const { public: isCreationPublic, email, firstName, lastName, creationName } = values
         const { combinedVelocity, layerDimensions, strategy } = newCreation
 
-        console.log({
-          creation_query: creationQuery,
-          combined_velocity: combinedVelocity,
-          strategy,
-          layer_dimensions: layerDimensions,
-          public: isCreationPublic,
-          signatures: bucketImages,
-          creator_first_name: firstName,
-          creator_last_name: lastName,
-          creator_email: email,
-          creation_name: creationName,
-          ...creationData
-        })
-
         const { data, error } = await supabase
           .from('signatures')
           .insert({
@@ -192,7 +193,15 @@ export default function Contact() {
             description: 'an error occurred!'
           })
         } else {
-          localStorage.removeItem('__poc_new_creation')
+          for (let i = 0; i < signaturesCount; i++) {
+            localStorage.removeItem(`__poc_creation_signature_${i}`)
+          }
+          ;[
+            '__poc_creation_signatures_count',
+            '__poc_new_creation',
+            '__poc_creation_query',
+            '__poc_creation_data'
+          ].forEach((key) => localStorage.removeItem(key))
 
           const { id } = data[0]!
 
@@ -292,7 +301,7 @@ export default function Contact() {
                               />
                             </FormControl>
                             <FormMessage className="font-normal lowercase text-muted-foreground leading-5">
-                              not public
+                              will not be publicly displayed
                             </FormMessage>
                           </FormItem>
                         )}

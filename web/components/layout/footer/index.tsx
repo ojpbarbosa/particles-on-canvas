@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import Version from './version'
 import Theme from './theme'
+import Status from './status'
 
 const links = [
   {
@@ -83,14 +84,12 @@ export default function Footer() {
               </ul>
             </div>
           </div>
-          <div className="flex flex-col gap-y-3">
-            <h4 className="text-sm font-medium h-4">theme</h4>
-            <Theme />
-          </div>
-          <div className="flex flex-col gap-y-3">
+          <Theme />
+          <div className="flex flex-col gap-y-8 sm:gap-y-3">
+            <Status />
             <div className="flex flex-col gap-y-3">
-              <h4 className="text-sm h-4 font-medium">disclaimer</h4>
-              <p className="text-muted-foreground -mt-1 text-sm font-normal">
+              <h4 className="text-sm font-medium sm:-mt-0.5">disclaimer</h4>
+              <p className="text-muted-foreground sm:-mt-1 h-4 text-sm font-normal">
                 this project is still highly experimental <Version />.
               </p>
             </div>

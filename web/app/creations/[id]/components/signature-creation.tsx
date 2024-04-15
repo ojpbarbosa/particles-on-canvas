@@ -28,7 +28,7 @@ export default async function SignatureCreation({ id }: SignatureCreationProps) 
           <div className="flex md:mt-0 -mt-6 flex-col gap-y-4 md:max-w-52 max-w-full">
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">name</p>
-              <p className="text-sm font-semibold tracking-tight">
+              <p className="text-sm font-semibold tracking-tight lowercase">
                 {signature.creation_name ? signature.creation_name : signature.id.split('-')[0]}
               </p>
             </div>

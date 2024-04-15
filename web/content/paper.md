@@ -10,7 +10,7 @@ We are a team of eight passionate students driven by making a positive impact in
 
 ### Experiment setup
 
-Our goal is to create a visual and artistic signature for the line, and to do so we will take into account a variety of data from different sensors [2]. We will use the proton synchrotron to create different kinds of particles (protons, electrons, and antiparticles) withrticl different momentums. Then, we will send these paes in our line to collect different interactions with physical detectors. We will also determine, with measurements, what kind of particles went through the target, their speed, and their spatial distribution.
+Our goal is to create a visual and artistic signature for the line, and to do so we will take into account a variety of data from different sensors [2]. We will use the proton synchrotron to create different kinds of particles (protons, electrons, and antiparticles) withrticl different momentums. Then, we will send these particles in our line to collect different interactions with physical detectors. We will also determine, with measurements, what kind of particles went through the target, their speed, and their spatial distribution.
 
 ![Line setup systematic representation](/paper/line.jpg)
 
