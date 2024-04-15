@@ -176,7 +176,7 @@ export default function Create() {
         activation,
         particles: particleDataInputs.map((input: ParticleData) => ({
           particle: input.particle,
-          velocity: parseInt(input.velocity),
+          velocity: parseFloat(input.velocity),
           priority: parseInt(input.priority)
         }))
       }
@@ -184,21 +184,23 @@ export default function Create() {
       setCreationData(body)
 
       setSignatures(await createSignatures(body))
-
-      setCreationLoading(false)
     } catch {
-      setCreationLoading(false)
       toast({
         variant: 'destructive',
         className: 'rounded-none p-2',
         description: 'an error occurred, please try again!'
       })
+    } finally {
+      setCreationLoading(false)
     }
   }
 
   useEffect(() => {
     const isValidInput = particleDataInputs.every(
-      (input: ParticleData) => PARTICLES.includes(input.particle) && input.velocity !== ''
+      (input: ParticleData) =>
+        PARTICLES.includes(input.particle) &&
+        input.velocity !== '' &&
+        parseFloat(input.velocity) > 0
     )
     setUnableToCreate(isValidInput)
 
