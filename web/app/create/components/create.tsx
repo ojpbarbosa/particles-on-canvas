@@ -36,7 +36,7 @@ const ACTIVATION_FUNCTIONS = ['tanh', 'sigmoid', 'relu', 'softsign', 'sin', 'cos
 
 const MAX_WIDTH_HEIGHT = 756
 const MIN_WIDTH_HEIGHT = 64
-const MAX_IMAGES = 10
+const MAX_IMAGES = 2
 
 export default function Create() {
   const initialParticleData: ParticleData = {
