@@ -1,9 +1,9 @@
 import os
-from configuration import configuration_by_name
+from app.configuration import configuration_by_name
 from dotenv import load_dotenv
 from flask import Flask, request
 from flask_cors import CORS
-from factory.controller_factory import signature_controller_factory, heartbeat_controller_factory
+from app.factory.controller_factory import signature_controller_factory, heartbeat_controller_factory
 
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')

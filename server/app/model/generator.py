@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 import torch
-from .neural_network import FeedForwardNetwork
-from .helper import hsl_to_rgb_torch, hsv_to_rgb_torch
+from app.model.neural_network import FeedForwardNetwork
+from app.model.helper import hsl_to_rgb_torch, hsv_to_rgb_torch
 
 
 def process_xy_meshgrid(x_values: np.ndarray, y_values: np.ndarray, symmetry: bool, trig: bool, z1: float, z2: float) -> torch.Tensor:

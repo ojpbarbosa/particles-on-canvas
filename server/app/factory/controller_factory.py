@@ -1,7 +1,7 @@
-from repository.signature_repository import SignatureRepository
-from service.signature_service import SignatureService
-from controller.signature_controller import SignatureController
-from controller.heartbeat_controller import HeartbeatController
+from app.repository.signature_repository import SignatureRepository
+from app.service.signature_service import SignatureService
+from app.controller.signature_controller import SignatureController
+from app.controller.heartbeat_controller import HeartbeatController
 
 
 def signature_controller_factory() -> SignatureController:

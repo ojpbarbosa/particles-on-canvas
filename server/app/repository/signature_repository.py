@@ -3,8 +3,8 @@ import cv2
 import hashlib
 import numpy as np
 from typing import List
-from model.generator import create_image
-from model.neural_network import FeedForwardNetwork
+from app.model.generator import create_image
+from app.model.neural_network import FeedForwardNetwork
 
 
 class SignatureRepository:

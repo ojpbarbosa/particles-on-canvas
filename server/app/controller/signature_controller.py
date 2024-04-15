@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from service.signature_service import SignatureService
+from app.service.signature_service import SignatureService
 
 
 class SignatureController:
