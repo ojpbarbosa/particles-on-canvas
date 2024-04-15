@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: CreationPageProps): Promise<M
   const { id, creation_name: creationName } = data![0] as Signature
 
   return {
-    title: `PARTICLES ON CANVAS - GALLERY - ${creationName ? creationName.toUpperCase() : id.split('-')[0]}`
+    title: `PARTICLES ON CANVAS - CREATIONS - ${creationName ? creationName.toUpperCase() : id.split('-')[0].toUpperCase()}`
   }
 }
 
