@@ -45,6 +45,8 @@ export async function generateMetadata({ params }: CreationPageProps): Promise<M
   }
 }
 
+export const revalidate = 0
+
 export default function CreationPage({ params: { id } }: CreationPageProps) {
   return <SignatureCreation id={id} />
 }

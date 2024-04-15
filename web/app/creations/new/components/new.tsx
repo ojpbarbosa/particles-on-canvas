@@ -92,6 +92,7 @@ export default function Contact() {
         }
       }
     } else {
+      clearLocalStorage()
       router.push('/creations')
     }
 
@@ -99,6 +100,7 @@ export default function Contact() {
     if (creation) {
       setNewCreation({ ...JSON.parse(creation), signatures })
     } else {
+      clearLocalStorage()
       router.push('/creations')
     }
 
@@ -106,6 +108,7 @@ export default function Contact() {
     if (query) {
       setCreationQuery(query)
     } else {
+      clearLocalStorage()
       router.push('/creations')
     }
 
@@ -113,6 +116,7 @@ export default function Contact() {
     if (data) {
       setCreationData(JSON.parse(data))
     } else {
+      clearLocalStorage()
       router.push('/creations')
     }
   }
@@ -131,6 +135,18 @@ export default function Contact() {
   })
 
   const { isValid } = useFormState({ control: form.control })
+
+  function clearLocalStorage() {
+    for (let i = 0; i < signaturesCount; i++) {
+      localStorage.removeItem(`poc.new.creation.signatures.${i}`)
+    }
+    ;[
+      'poc.new.creation.signatures.count',
+      'poc.new.creation',
+      'poc.create.query',
+      'poc.new.creation.data'
+    ].forEach((key) => localStorage.removeItem(key))
+  }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true)
@@ -193,15 +209,7 @@ export default function Contact() {
             description: 'an error occurred!'
           })
         } else {
-          for (let i = 0; i < signaturesCount; i++) {
-            localStorage.removeItem(`poc.new.creation.signatures.${i}`)
-          }
-          ;[
-            'poc.new.creation.signatures.count',
-            'poc.new.creation',
-            'poc.create.query',
-            'poc.new.creation.data'
-          ].forEach((key) => localStorage.removeItem(key))
+          clearLocalStorage()
 
           const { id } = data[0]!
 
