@@ -36,7 +36,7 @@ class SignatureService:
 
         combined_velocity = 0
 
-        for particle in particles:
+        for index, particle in enumerate(particles):
             particle_type = particle.get('particle', 'electron')
             velocity = particle.get('velocity', 0)
             if velocity < 0:
@@ -44,11 +44,10 @@ class SignatureService:
             elif velocity > 0.0299792458:
                 velocity = 0.0299792458
 
-            priority = particle.get('priority', 1)
+            default_priority = len(particles) - index
+            priority = particle.get('priority', default_priority)
             if priority < 0:
                 priority = 0
-            if priority > 1:
-                priority = 1
 
             particle_weighted_velocity = velocity * priority
             combined_velocity += particle_weighted_velocity

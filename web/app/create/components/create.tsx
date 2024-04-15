@@ -36,7 +36,7 @@ const ACTIVATION_FUNCTIONS = ['tanh', 'sigmoid', 'relu', 'softsign', 'sin', 'cos
 
 const DEFAULT_WIDTH_HEIGHT = 512
 
-const PRODUCTION_MAX_WIDTH_HEIGHT = 756
+const PRODUCTION_MAX_WIDTH_HEIGHT = 768
 const PRODUCTION_MIN_WIDTH_HEIGHT = 64
 const PRODUCTION_MAX_IMAGES = 2
 
