@@ -1,8 +1,25 @@
+use serde::{Deserialize, Serialize};
 use std::time::Instant;
 
 const SERVICE_URL: &str = "https://particles-on-canvas.onrender.com";
 
 const KEEP_ALIVE_SECONDS_TIMEOUT: u64 = 60 * 3; // 3 minutes
+
+#[derive(Deserialize, Serialize)]
+struct Signatures {
+    #[serde(rename = "combinedVelocity")]
+    combined_velocity: u64,
+    #[serde(rename = "layerDimensions")]
+    layer_dimensions: Vec<u16>,
+    strategy: String,
+    signatures: Vec<Signature>,
+}
+
+#[derive(Deserialize, Serialize)]
+struct Signature {
+    image: String,
+    seed: String,
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

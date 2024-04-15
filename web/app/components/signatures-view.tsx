@@ -54,7 +54,7 @@ export default function SignaturesView({
     const { combinedVelocity, layerDimensions, strategy } = signatures
 
     localStorage.setItem(
-      '__poc_new_creation',
+      'poc.new.creation',
       JSON.stringify({
         combinedVelocity,
         layerDimensions,
@@ -62,10 +62,13 @@ export default function SignaturesView({
       })
     )
 
-    localStorage.setItem('__poc_creation_signatures_count', signatures.signatures.length.toString())
+    localStorage.setItem(
+      'poc.new.creation.signatures.count',
+      signatures.signatures.length.toString()
+    )
     signatures.signatures.forEach((signature, i) => {
       localStorage.setItem(
-        `__poc_creation_signature_${i}`,
+        `poc.new.creation.signatures.${i}`,
         JSON.stringify({
           image: signature.image,
           seed: signature.seed
@@ -73,8 +76,8 @@ export default function SignaturesView({
       )
     })
 
-    localStorage.setItem('__poc_creation_query', queryParams)
-    localStorage.setItem('__poc_creation_data', JSON.stringify(creationData))
+    localStorage.setItem('poc.create.query', queryParams)
+    localStorage.setItem('poc.new.creation.data', JSON.stringify(creationData))
 
     router.push('/creations/new')
   }

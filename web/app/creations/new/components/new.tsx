@@ -82,11 +82,11 @@ export default function Contact() {
   if (mounted) {
     const signatures: { image: string; seed: string }[] = []
 
-    const count = localStorage.getItem('__poc_creation_signatures_count')
+    const count = localStorage.getItem('poc.new.creation.signatures.count')
     if (count) {
       setSignaturesCount(parseInt(count))
       for (let i = 0; i < parseInt(count); i++) {
-        const signature = localStorage.getItem(`__poc_creation_signature_${i}`)
+        const signature = localStorage.getItem(`poc.new.creation.signatures.${i}`)
         if (signature) {
           signatures.push(JSON.parse(signature))
         }
@@ -95,21 +95,21 @@ export default function Contact() {
       router.push('/creations')
     }
 
-    const creation = localStorage.getItem('__poc_new_creation')
+    const creation = localStorage.getItem('poc.new.creation')
     if (creation) {
       setNewCreation({ ...JSON.parse(creation), signatures })
     } else {
       router.push('/creations')
     }
 
-    const query = localStorage.getItem('__poc_creation_query')
+    const query = localStorage.getItem('poc.create.query')
     if (query) {
       setCreationQuery(query)
     } else {
       router.push('/creations')
     }
 
-    const data = localStorage.getItem('__poc_creation_data')
+    const data = localStorage.getItem('poc.new.creation.data')
     if (data) {
       setCreationData(JSON.parse(data))
     } else {
@@ -194,13 +194,13 @@ export default function Contact() {
           })
         } else {
           for (let i = 0; i < signaturesCount; i++) {
-            localStorage.removeItem(`__poc_creation_signature_${i}`)
+            localStorage.removeItem(`poc.new.creation.signatures.${i}`)
           }
           ;[
-            '__poc_creation_signatures_count',
-            '__poc_new_creation',
-            '__poc_creation_query',
-            '__poc_creation_data'
+            'poc.new.creation.signatures.count',
+            'poc.new.creation',
+            'poc.create.query',
+            'poc.new.creation.data'
           ].forEach((key) => localStorage.removeItem(key))
 
           const { id } = data[0]!

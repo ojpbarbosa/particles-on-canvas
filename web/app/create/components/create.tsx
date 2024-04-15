@@ -22,7 +22,7 @@ import {
 import Combobox from './particle-data-input/combobox'
 import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from '@/components/ui/use-toast'
-import { type Signatures, createSignatures } from '@/lib/api'
+import { type Signatures, createSignatures, getServiceType } from '@/lib/api'
 import SignaturesView from '@/app/components/signatures-view'
 
 export type ParticleData = {
@@ -34,24 +34,33 @@ export type ParticleData = {
 const PARTICLES = ['electron', 'proton', 'kaon', 'pion']
 const ACTIVATION_FUNCTIONS = ['tanh', 'sigmoid', 'relu', 'softsign', 'sin', 'cos']
 
-const MAX_WIDTH_HEIGHT = 756
-const MIN_WIDTH_HEIGHT = 64
-const MAX_IMAGES = 2
+const DEFAULT_WIDTH_HEIGHT = 512
+
+const PRODUCTION_MAX_WIDTH_HEIGHT = 756
+const PRODUCTION_MIN_WIDTH_HEIGHT = 64
+const PRODUCTION_MAX_IMAGES = 2
+
+const NGROK_MAX_WIDTH_HEIGHT = 1280
+const NGROK_MIN_WIDTH_HEIGHT = 64
+const NGROK_MAX_IMAGES = 5
 
 export default function Create() {
   const initialParticleData: ParticleData = {
     particle: '',
-    velocity: '1',
+    velocity: '0',
     priority: PARTICLES.length.toString()
   }
 
   const [signatures, setSignatures] = useState({} as Signatures)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [creationData, setCreationData] = useState({} as any)
+  const [maxWidthHeight, setMaxWidthHeight] = useState(PRODUCTION_MAX_WIDTH_HEIGHT)
+  const [minWidthHeight, setMinWidthHeight] = useState(PRODUCTION_MIN_WIDTH_HEIGHT)
+  const [maxImages, setMaxImages] = useState(PRODUCTION_MAX_IMAGES)
 
   const [query, setQuery] = useQueryParams({
-    width: withDefault(StringParam, '256'),
-    height: withDefault(StringParam, '256'),
+    width: withDefault(StringParam, DEFAULT_WIDTH_HEIGHT.toString()),
+    height: withDefault(StringParam, DEFAULT_WIDTH_HEIGHT.toString()),
     images: withDefault(StringParam, '1'),
     alpha: withDefault(BooleanParam, false),
     symmetry: withDefault(BooleanParam, false),
@@ -108,30 +117,30 @@ export default function Create() {
     let { name, value } = event.target
 
     if (name === 'width' || name === 'height') {
-      if (parseInt(value) > MAX_WIDTH_HEIGHT) {
-        value = `${MAX_WIDTH_HEIGHT}`
+      if (parseInt(value) > maxWidthHeight) {
+        value = maxWidthHeight.toString()
 
         toast({
           className: 'rounded-none p-2',
-          description: `maximum width and height is ${MAX_WIDTH_HEIGHT}!`
+          description: `maximum width and height is ${maxWidthHeight} px!`
         })
-      } else if (parseInt(value) < MIN_WIDTH_HEIGHT) {
-        value = `${MIN_WIDTH_HEIGHT}`
+      } else if (parseInt(value) < minWidthHeight) {
+        value = minWidthHeight.toString()
 
         toast({
           className: 'rounded-none p-2',
-          description: `minimum width and height is ${MIN_WIDTH_HEIGHT}!`
+          description: `minimum width and height is ${minWidthHeight} px!`
         })
       } else if (!value) {
-        value = '256'
+        value = DEFAULT_WIDTH_HEIGHT.toString()
       }
     } else if (name === 'images') {
-      if (parseInt(value) > MAX_IMAGES) {
-        value = `${MAX_IMAGES}`
+      if (parseInt(value) > maxImages) {
+        value = maxImages.toString()
 
         toast({
           className: 'rounded-none p-2',
-          description: `maximum images is ${MAX_IMAGES}!`
+          description: `maximum images is ${maxImages}!`
         })
       } else if (parseInt(value) < 1) {
         value = '1'
@@ -154,7 +163,7 @@ export default function Create() {
     try {
       setCreationLoading(true)
 
-      localStorage.setItem('__poc_creation_query', location.search)
+      localStorage.setItem('poc.create.query', location.search)
 
       const body = {
         width: parseInt(width),
@@ -192,6 +201,14 @@ export default function Create() {
       (input: ParticleData) => PARTICLES.includes(input.particle) && input.velocity !== ''
     )
     setUnableToCreate(isValidInput)
+
+    getServiceType().then((type) => {
+      if (type === 'ngrok') {
+        setMaxWidthHeight(NGROK_MAX_WIDTH_HEIGHT)
+        setMinWidthHeight(NGROK_MIN_WIDTH_HEIGHT)
+        setMaxImages(NGROK_MAX_IMAGES)
+      }
+    })
   }, [particleDataInputs])
 
   return (
@@ -279,7 +296,7 @@ export default function Create() {
                                     images === '1' && 'text-muted-foreground'
                                   )}
                                   min={1}
-                                  max={MAX_IMAGES}
+                                  max={maxImages}
                                   value={images}
                                   onChange={handleConfigurationChange}
                                   onBlur={validateValue}
@@ -299,10 +316,11 @@ export default function Create() {
                                   type="number"
                                   className={cn(
                                     'rounded-none shadow-none w-20',
-                                    width === '256' && 'text-muted-foreground'
+                                    width === DEFAULT_WIDTH_HEIGHT.toString() &&
+                                      'text-muted-foreground'
                                   )}
-                                  min={MIN_WIDTH_HEIGHT}
-                                  max={MAX_WIDTH_HEIGHT}
+                                  min={minWidthHeight}
+                                  max={maxWidthHeight}
                                   value={width}
                                   onChange={handleConfigurationChange}
                                   onBlur={validateValue}
@@ -322,10 +340,11 @@ export default function Create() {
                                   type="number"
                                   className={cn(
                                     'rounded-none shadow-none w-20',
-                                    height === '256' && 'text-muted-foreground'
+                                    height === DEFAULT_WIDTH_HEIGHT.toString() &&
+                                      'text-muted-foreground'
                                   )}
-                                  min={MIN_WIDTH_HEIGHT}
-                                  max={MAX_WIDTH_HEIGHT}
+                                  min={minWidthHeight}
+                                  max={maxWidthHeight}
                                   value={height}
                                   onChange={handleConfigurationChange}
                                   onBlur={validateValue}

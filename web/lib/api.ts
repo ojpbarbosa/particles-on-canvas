@@ -62,6 +62,16 @@ async function getService(): Promise<string> {
   }
 }
 
+export async function getServiceType(): Promise<'ngrok' | 'production'> {
+  const service = await getService()
+
+  if (service === NGROK_SERVICE_URL) {
+    return 'ngrok'
+  }
+
+  return 'production'
+}
+
 export async function createSignatures(body: CreateSignaturesBody): Promise<Signatures> {
   const currentService = await getService()
   const response = await fetch(`${currentService}/signatures/create`, {

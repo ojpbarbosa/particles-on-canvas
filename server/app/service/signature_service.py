@@ -32,14 +32,23 @@ class SignatureService:
             'electron': 'hsv'
         }
 
-        color_totals = {'bw': 0, 'rgb': 0, 'hsv': 0, 'cmyk': -10}
+        color_totals = {'bw': 0, 'rgb': 0, 'hsv': 0, 'cmyk': 0}
 
         combined_velocity = 0
 
         for particle in particles:
             particle_type = particle.get('particle', 'electron')
-            velocity = particle.get('velocity', 1)
+            velocity = particle.get('velocity', 0)
+            if velocity < 0:
+                velocity = 0
+            elif velocity > 0.0299792458:
+                velocity = 0.0299792458
+
             priority = particle.get('priority', 1)
+            if priority < 0:
+                priority = 0
+            if priority > 1:
+                priority = 1
 
             particle_weighted_velocity = velocity * priority
             combined_velocity += particle_weighted_velocity

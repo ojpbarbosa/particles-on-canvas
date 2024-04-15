@@ -12,8 +12,22 @@ class SignatureController:
         particles = data.get('particles', [])
 
         n_images = int(data.get('images', 1))
+        if n_images < 1:
+            n_images = 1
+        elif n_images > 5:
+            n_images = 5
+
         image_height = int(data.get('height', 512))
+        if image_height < 64:
+            image_height = 64
+        elif image_height > 1280:
+            image_height = 1280
+
         image_width = int(data.get('width', 512))
+        if image_width < 64:
+            image_width = 64
+        elif image_width > 1280:
+            image_width = 1280
 
         symmetry = data.get('symmetry', False)
         trig = data.get('trig', False)

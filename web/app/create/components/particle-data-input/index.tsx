@@ -14,6 +14,9 @@ type ParticleDataInputProps = {
   index: number
 }
 
+const MIN_VELOCITY = 0.0000000001
+const MAX_VELOCITY = 0.0299792458
+
 export default function ParticleDataInput({
   availableParticles,
   particleData,
@@ -29,15 +32,22 @@ export default function ParticleDataInput({
   }
 
   function validateValue(event: FocusEvent<HTMLInputElement, HTMLElement>) {
-    if (parseInt(event.target.value) < 1) {
-      setParticleData(index, 'velocity', '1')
+    if (parseFloat(event.target.value) < MIN_VELOCITY) {
+      setParticleData(index, 'velocity', MIN_VELOCITY.toString())
 
       toast({
         className: 'rounded-none p-2',
-        description: 'minimum velocity is 1!'
+        description: `minimum velocity is ${MIN_VELOCITY}!`
+      })
+    } else if (parseFloat(event.target.value) > MAX_VELOCITY) {
+      setParticleData(index, 'velocity', MAX_VELOCITY.toString())
+
+      toast({
+        className: 'rounded-none p-2',
+        description: `maximum velocity is ${MAX_VELOCITY} cm per ps - the speed of light!`
       })
     } else if (!event.target.value) {
-      setParticleData(index, 'velocity', '1')
+      setParticleData(index, 'velocity', MIN_VELOCITY.toString())
     }
   }
 
@@ -61,15 +71,17 @@ export default function ParticleDataInput({
             </div>
           </div>
           <div>
-            <div className="flex flex-col gap-y-3 w-20">
+            <div className="flex flex-col gap-y-3 w-36">
               <Label className="font-normal">velocity</Label>
               <Input
                 type="number"
                 className={cn(
                   'rounded-none shadow-none',
-                  particleData.velocity === '1' && 'text-muted-foreground'
+                  particleData.velocity === '0' && 'text-muted-foreground'
                 )}
-                min={1}
+                min={MIN_VELOCITY}
+                max={MAX_VELOCITY}
+                step={0.0000001}
                 value={particleData.velocity}
                 onChange={handleVelocityChange}
                 onBlur={validateValue}

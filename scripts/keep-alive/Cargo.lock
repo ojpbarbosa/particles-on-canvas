@@ -609,10 +609,12 @@ dependencies = [
 
 [[package]]
 name = "particles-on-canvas-keep-alive"
-version = "0.1.0"
+version = "1.0.0-beta"
 dependencies = [
  "chrono",
  "reqwest",
+ "serde",
+ "serde_json",
  "tokio",
 ]
 
