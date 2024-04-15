@@ -9,7 +9,7 @@
     "format": "prettier --write .",
     "lint": "next lint --fix",
     "prepare": "cd .. && husky web/.husky",
-    "release": "standard-version --no-verify",
+    "release": "standard-version --infile ../CHANGELOG.md",
     "start": "next start"
   },
   "dependencies": {
