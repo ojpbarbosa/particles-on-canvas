@@ -8,7 +8,7 @@ from factory.controller_factory import signature_controller_factory, heartbeat_c
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv(dotenv_path)
-env = os.environ.get("ENV", "production")
+env = os.environ.get('ENV', 'production')
 
 app = Flask(__name__)
 CORS(app)
@@ -18,15 +18,15 @@ signature_controller = signature_controller_factory()
 heartbeat_controller = heartbeat_controller_factory()
 
 
-@app.route("/heartbeat", methods=["GET"])
+@app.route('/heartbeat', methods=['GET'])
 def heartbeat():
     return heartbeat_controller.heartbeat(request=request)
 
 
-@app.route("/signatures/create", methods=["POST"])
+@app.route('/signatures/create', methods=['POST'])
 def create():
     return signature_controller.create(request=request)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run()

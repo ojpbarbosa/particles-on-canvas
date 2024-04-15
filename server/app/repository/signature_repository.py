@@ -19,7 +19,7 @@ class SignatureRepository:
                                                    symmetry=symmetry, trig=trig, alpha=alpha, noise=noise, color_mode=color_mode)
 
         m = hashlib.sha512()
-        m.update(base64_image.encode("utf-8"))
+        m.update(base64_image.encode('utf-8'))
         signature = m.hexdigest()
 
         return (signature, base64_image)
@@ -35,8 +35,8 @@ class SignatureRepository:
         image_np = np.clip(image_np, 0, 1)
         image_np = (image_np * 255).astype(np.uint8)
 
-        _, buffer = cv2.imencode(".png", image_np)
+        _, buffer = cv2.imencode('.png', image_np)
 
-        base64_image = base64.b64encode(buffer).decode("utf-8")
+        base64_image = base64.b64encode(buffer).decode('utf-8')
 
         return base64_image

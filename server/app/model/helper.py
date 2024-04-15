@@ -3,7 +3,7 @@ import torch
 
 
 def hsv_to_rgb(hue: float, saturation: float, value: float) -> tuple:
-    """
+    '''
     Convert a color from HSV to RGB.
 
     Parameters
@@ -19,7 +19,7 @@ def hsv_to_rgb(hue: float, saturation: float, value: float) -> tuple:
     -------
     tuple
         The RGB representation of the color.
-    """
+    '''
     hue *= 6
     index = np.floor(hue)
     f = hue - index
@@ -36,7 +36,7 @@ def hsv_to_rgb(hue: float, saturation: float, value: float) -> tuple:
 
 
 def hsv_to_rgb_torch(image: torch.Tensor) -> torch.Tensor:
-    """
+    '''
     Convert an HSV image to RGB format using a tensor.
 
     Parameters
@@ -48,7 +48,7 @@ def hsv_to_rgb_torch(image: torch.Tensor) -> torch.Tensor:
     -------
     torch.Tensor
         The image tensor in RGB format.
-    """
+    '''
     _h = image[:, :, 0].flatten().detach().numpy()
     _s = image[:, :, 1].flatten().detach().numpy()
     _v = image[:, :, 2].flatten().detach().numpy()
@@ -72,7 +72,7 @@ def hsv_to_rgb_torch(image: torch.Tensor) -> torch.Tensor:
 
 
 def hsl_to_rgb_torch(h: torch.Tensor, s: torch.Tensor, l: torch.Tensor) -> torch.Tensor:
-    """
+    '''
     Convert an HSL image to RGB format using PyTorch.
 
     Parameters
@@ -88,7 +88,7 @@ def hsl_to_rgb_torch(h: torch.Tensor, s: torch.Tensor, l: torch.Tensor) -> torch
     -------
     torch.Tensor
         The image tensor in RGB format.
-    """
+    '''
     c = (1 - torch.abs(2 * l - 1)) * s
     x = c * (1 - torch.abs((h * 6) % 2 - 1))
     m = l - c / 2
@@ -101,7 +101,7 @@ def hsl_to_rgb_torch(h: torch.Tensor, s: torch.Tensor, l: torch.Tensor) -> torch
     mask = (0 <= h) & (h < 1/6)
     r[mask], g[mask], b[mask] = c[mask] + m[mask], x[mask] + m[mask], m[mask]
 
-    # Yellow dominant segment
+    # yellow dominant segment
     mask = (1/6 <= h) & (h < 1/3)
     r[mask], g[mask], b[mask] = x[mask] + m[mask], c[mask] + m[mask], m[mask]
 

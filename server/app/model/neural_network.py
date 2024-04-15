@@ -4,7 +4,7 @@ from typing import List
 
 
 def init_normal_weights(module: nn.Module):
-    """
+    '''
     Initializes the weights of the module to a normal distribution.
 
     This function modifies the module's weights and biases in-place if the module
@@ -18,7 +18,7 @@ def init_normal_weights(module: nn.Module):
     Returns
     -------
     None
-    """
+    '''
     classname = module.__class__.__name__
     if classname.find('Linear') != -1:
         module.weight.data.normal_(0.0, 1.0)
@@ -27,7 +27,7 @@ def init_normal_weights(module: nn.Module):
 
 
 def get_activation_function(function: str):
-    """
+    '''
     Returns an activation function based on the given string identifier.
 
     Parameters
@@ -39,15 +39,14 @@ def get_activation_function(function: str):
     -------
     A PyTorch activation function class or function.
     If the specified function is not found, it defaults to `nn.Tanh()`.
-
-    """
+    '''
     available_functions = {
-        "tanh": nn.Tanh(),
-        "sigmoid": nn.Sigmoid(),
-        "relu": nn.ReLU(),
-        "softsign": nn.Softsign(),
-        "sin": torch.sin,
-        "cos": torch.cos
+        'tanh': nn.Tanh(),
+        'sigmoid': nn.Sigmoid(),
+        'relu': nn.ReLU(),
+        'softsign': nn.Softsign(),
+        'sin': torch.sin,
+        'cos': torch.cos
     }
 
     function = function.lower()
@@ -55,12 +54,12 @@ def get_activation_function(function: str):
     if function in available_functions:
         return available_functions[function]
     else:
-        print(f"Non-supported activation function {function}. Using tanh.")
+        print(f'Non-supported activation function {function}. Using tanh.')
         return nn.Tanh()
 
 
 class FeedForwardNetwork(nn.Module):
-    """
+    '''
     A feedforward neural network model using PyTorch.
 
     Parameters
@@ -80,23 +79,22 @@ class FeedForwardNetwork(nn.Module):
         A list of linear layers in the network.
     activation : Callable
         The activation function to use between layers.
-
-    """
+    '''
 
     def __init__(self,
                  layers_dimensions: List[int] = [10, 10, 10, 10, 10],
-                 activation_function: str = "tanh",
-                 color_mode: str = "rgb",
+                 activation_function: str = 'tanh',
+                 color_mode: str = 'rgb',
                  alpha: bool = True):
         super(FeedForwardNetwork, self).__init__()
 
         # processing the color_mode and alpha to determine the output nodes
         color_mode = color_mode.lower()
-        if color_mode in ["rgb", "hsv", "hsl"]:
+        if color_mode in ['rgb', 'hsv', 'hsl']:
             out_nodes = 3 + int(alpha)
-        elif color_mode == "cmyk":
+        elif color_mode == 'cmyk':
             out_nodes = 4 + int(alpha)
-        else:  # "bw" or default
+        else:  # 'bw' or default
             out_nodes = 1 + int(alpha)
 
         # initializing the layers of the network
@@ -116,7 +114,7 @@ class FeedForwardNetwork(nn.Module):
         self.apply(init_normal_weights)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """
+        '''
         Defines the forward pass of the network.
 
         Parameters
@@ -128,7 +126,7 @@ class FeedForwardNetwork(nn.Module):
         -------
         torch.Tensor
             The output tensor of the network after passing through the layers and activations.
-        """
+        '''
         out = x
         for i, layer in enumerate(self.layers):
             out = layer(out)

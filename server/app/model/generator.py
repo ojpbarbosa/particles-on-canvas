@@ -6,7 +6,7 @@ from .helper import hsl_to_rgb_torch, hsv_to_rgb_torch
 
 
 def process_xy_meshgrid(x_values: np.ndarray, y_values: np.ndarray, symmetry: bool, trig: bool, z1: float, z2: float) -> torch.Tensor:
-    """
+    '''
     Process x and y coordinate arrays through specified transformations and generates a combined tensor.
 
     Parameters
@@ -28,7 +28,7 @@ def process_xy_meshgrid(x_values: np.ndarray, y_values: np.ndarray, symmetry: bo
     -------
     torch.Tensor
         A tensor combining the transformed x, y, radius, and z1, z2 values.
-    """
+    '''
     if symmetry:
         x_values = x_values ** 2
         y_values = y_values ** 2
@@ -52,7 +52,7 @@ def process_xy_meshgrid(x_values: np.ndarray, y_values: np.ndarray, symmetry: bo
 
 
 def init_data(image_height: int = 512, image_width: int = 512, symmetry: bool = False, trig: bool = True, z1: float = -0.618, z2: float = 0.618, noise: bool = False, noise_std: float = 0.01):
-    """
+    '''
     Initialize data for the neural network by creating a meshgrid and processing it.
 
     Parameters
@@ -78,7 +78,7 @@ def init_data(image_height: int = 512, image_width: int = 512, symmetry: bool = 
     -------
     torch.Tensor
         The initialized data as a tensor.
-    """
+    '''
     factor = min(image_height, image_width)
 
     x = [(i / factor - 0.5) * 2 for i in range(image_height)]
@@ -94,7 +94,7 @@ def init_data(image_height: int = 512, image_width: int = 512, symmetry: bool = 
 
 
 def transform_colors(image: torch.Tensor, color_mode: str, alpha: bool) -> torch.Tensor:
-    """
+    '''
     Transform the colors of an image based on the specified color mode and alpha channel inclusion.
 
     Parameters
@@ -110,7 +110,7 @@ def transform_colors(image: torch.Tensor, color_mode: str, alpha: bool) -> torch
     -------
     torch.Tensor
         The color-transformed image tensor.
-    """
+    '''
     if alpha:
         alpha_tensor = image[:, :, -1]
         alpha_val = 1 - torch.abs(2 * alpha_tensor - 1)
@@ -120,25 +120,25 @@ def transform_colors(image: torch.Tensor, color_mode: str, alpha: bool) -> torch
         a = torch.ones((image.size(0), image.size(1)),
                        device=image.device).unsqueeze(-1)
 
-    if color_mode == "rgb":
+    if color_mode == 'rgb':
         processed_image = image[:, :, 0:3]
-    elif color_mode == "bw":
+    elif color_mode == 'bw':
         processed_image = torch.cat([image[:, :, 0].unsqueeze(-1)] * 3, dim=-1)
-    elif color_mode == "cmyk":
+    elif color_mode == 'cmyk':
         r = (1 - image[:, :, 0]) * image[:, :, 3]
         g = (1 - image[:, :, 1]) * image[:, :, 3]
         b = (1 - image[:, :, 2]) * image[:, :, 3]
         processed_image = torch.stack([r, g, b], dim=-1)
-    elif color_mode == "hsv":
+    elif color_mode == 'hsv':
         processed_image = hsv_to_rgb_torch(image)
-    elif color_mode == "hsl":
+    elif color_mode == 'hsl':
         h = image[:, :, 0].flatten()
         s = image[:, :, 1].flatten()
         l = image[:, :, 2].flatten()
         processed_image = hsl_to_rgb_torch(h, s, l).view(image.size(
             0), image.size(1), 3)
     else:
-        raise ValueError(f"Non-supported color mode {color_mode}")
+        raise ValueError(f'Non-supported color mode {color_mode}')
 
     return torch.cat([processed_image, a], dim=-1)
 
@@ -148,17 +148,17 @@ def create_image(network: FeedForwardNetwork,
                  image_width: int = 512,
                  symmetry: bool = False,
                  trig: bool = True,
-                 color_mode: str = "rgb",
+                 color_mode: str = 'rgb',
                  alpha: bool = True,
                  z1: float = -0.618,
                  z2: float = 0.618,
-                 filename: str = "image",
-                 file_format: str = "png",
+                 filename: str = 'image',
+                 file_format: str = 'png',
                  save: bool = True,
                  use_gpu: bool = False,
                  with_noise: bool = False,
                  noise_std: float = 0.01) -> torch.Tensor:
-    """
+    '''
     Generate and save an image using a specified neural network model and a set of parameters.
 
     Parameters
@@ -203,7 +203,7 @@ def create_image(network: FeedForwardNetwork,
     -----
     This function handles device placement of tensors (CPU/GPU), noise addition, image generation,
     color transformation based on the specified mode, and optionally saves the image to a file.
-    """
+    '''
     input_data = init_data(image_height, image_width, symmetry,
                            trig, z1, z2, noise=with_noise, noise_std=noise_std)
 

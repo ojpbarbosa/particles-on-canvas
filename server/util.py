@@ -1,5 +1,5 @@
 def str_to_bool(string: str) -> bool:
-    """
+    '''
     Convert a string representation of truth to its boolean value.
 
     Parameters
@@ -17,9 +17,9 @@ def str_to_bool(string: str) -> bool:
     ------
     ValueError
         If the input string does not represent a boolean value.
-    """
-    true_values = {"true", "yes", "y", "t", "1"}
-    false_values = {"false", "no", "n", "f", "0"}
+    '''
+    true_values = {'true', 'yes', 'y', 't', '1'}
+    false_values = {'false', 'no', 'n', 'f', '0'}
 
     lower_string = string.lower()
     if lower_string in true_values:
@@ -28,4 +28,4 @@ def str_to_bool(string: str) -> bool:
         return False
     else:
         raise ValueError(
-            f"Input string '{string}' does not represent a boolean value.")
+            f'Input string "{string}" does not represent a boolean value.')
