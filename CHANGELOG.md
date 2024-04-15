@@ -1,5 +1,20 @@
 # Changelog
 
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [1.0.0-beta.0](https://github.com/ojpbarbosa/particles-on-canvas/compare/v1.1.0...v1.0.0-beta.0) (2024-04-15)
+
+
+### Features
+
+* minor numeric updates ([6ca7da9](https://github.com/ojpbarbosa/particles-on-canvas/commit/6ca7da94aafad9b7ce155c3b9d899881d22f15dc))
+* **web:** improve ui ([c73a868](https://github.com/ojpbarbosa/particles-on-canvas/commit/c73a8682fcf3870a62e0454d2fa744d000d3755b))
+* **web:** improve ui and ux ([ead75dd](https://github.com/ojpbarbosa/particles-on-canvas/commit/ead75dd332cd475cbf1414fc73cd67aca6ab536e))
+* **web:** increase api call timeout ([660d15f](https://github.com/ojpbarbosa/particles-on-canvas/commit/660d15f5ffa3db1837d902f1589cf6d4c075c51e))
+* **web:** limit MAX_IMAGES to 2 ([432452b](https://github.com/ojpbarbosa/particles-on-canvas/commit/432452b159f41023e0415e6a3ef51fb6cad9ebdf))
+* **web:** refactor and improve creations ux ([8e2f194](https://github.com/ojpbarbosa/particles-on-canvas/commit/8e2f1948572ffab911779d621dfb02541b37f80e))
+* **web:** set creations revalidation ([fbdeb1a](https://github.com/ojpbarbosa/particles-on-canvas/commit/fbdeb1a064a68eea9f64da94fb96f00fd5d13acf))
+
 ### 1.0.0-alpha (2024-04-14)
 
 ### Features
