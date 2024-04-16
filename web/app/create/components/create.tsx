@@ -163,6 +163,7 @@ export default function Create() {
     try {
       setCreationLoading(true)
 
+      localStorage.clear()
       localStorage.setItem('poc.create.query', location.search)
 
       const body = {

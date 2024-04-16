@@ -82,10 +82,14 @@ export default function SignaturesView({
 
       router.push('/creations/new')
     } catch {
+      signatures.signatures.forEach((_, i) => {
+        localStorage.removeItem(`poc.new.creation.signatures.${i}`)
+      })
+
       toast({
         variant: 'destructive',
         className: 'rounded-none p-2',
-        description: 'an error occurred, please try again!'
+        description: 'an error occurred, please try decreasing the number of images!'
       })
       setIsSaveLoading(false)
     }
