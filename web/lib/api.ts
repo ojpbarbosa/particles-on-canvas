@@ -43,19 +43,25 @@ async function fetchWithTimeout(resource: string, options: any = {}) {
 
 async function getService(): Promise<string> {
   try {
-    if (NGROK_SERVICE_URL) {
-      await fetchWithTimeout(`${NGROK_SERVICE_URL}/heartbeat`, {
+    try {
+      if (NGROK_SERVICE_URL) {
+        await fetchWithTimeout(`${NGROK_SERVICE_URL}/heartbeat`, {
+          method: 'GET',
+          timeout: 3 * 1000,
+          next: { revalidate: 0 }
+        })
+
+        return NGROK_SERVICE_URL
+      }
+    } catch {
+      await fetchWithTimeout(`${PRODUCTION_SERVICE_URL}/heartbeat`, {
         method: 'GET',
-        timeout: 3 * 1000
+        timeout: 10 * 60 * 1000,
+        next: { revalidate: 0 }
       })
 
-      return NGROK_SERVICE_URL
+      return PRODUCTION_SERVICE_URL
     }
-
-    await fetchWithTimeout(`${PRODUCTION_SERVICE_URL}/heartbeat`, {
-      method: 'GET',
-      timeout: 10 * 60 * 1000
-    })
 
     return PRODUCTION_SERVICE_URL
   } catch {

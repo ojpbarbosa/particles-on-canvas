@@ -62,7 +62,6 @@ const formSchema = z.object({
 })
 
 export default function Contact() {
-  const [mounted, setMounted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [newCreation, setNewCreation] = useState({} as Signatures)
   const [creationQuery, setCreationQuery] = useState('')
@@ -76,10 +75,6 @@ export default function Contact() {
   const supabase = createClient()
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (mounted) {
     const signatures: { image: string; seed: string }[] = []
 
     const count = localStorage.getItem('poc.new.creation.signatures.count')
@@ -119,7 +114,7 @@ export default function Contact() {
       clearLocalStorage()
       router.push('/creations')
     }
-  }
+  }, [])
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

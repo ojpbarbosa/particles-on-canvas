@@ -29,7 +29,7 @@ export default function SignaturesView({
   const router = useRouter()
   const pathname = usePathname()
 
-  const [isShareLoading, setIsShareLoading] = useState(false)
+  const [isSaveLoading, setIsSaveLoading] = useState(false)
 
   async function shareConfiguration() {
     try {
@@ -49,37 +49,46 @@ export default function SignaturesView({
   }
 
   function handleSave() {
-    setIsShareLoading(true)
+    setIsSaveLoading(true)
 
-    const { combinedVelocity, layerDimensions, strategy } = signatures
+    try {
+      const { combinedVelocity, layerDimensions, strategy } = signatures
 
-    localStorage.setItem(
-      'poc.new.creation',
-      JSON.stringify({
-        combinedVelocity,
-        layerDimensions,
-        strategy
-      })
-    )
-
-    localStorage.setItem(
-      'poc.new.creation.signatures.count',
-      signatures.signatures.length.toString()
-    )
-    signatures.signatures.forEach((signature, i) => {
       localStorage.setItem(
-        `poc.new.creation.signatures.${i}`,
+        'poc.new.creation',
         JSON.stringify({
-          image: signature.image,
-          seed: signature.seed
+          combinedVelocity,
+          layerDimensions,
+          strategy
         })
       )
-    })
 
-    localStorage.setItem('poc.create.query', queryParams)
-    localStorage.setItem('poc.new.creation.data', JSON.stringify(creationData))
+      localStorage.setItem(
+        'poc.new.creation.signatures.count',
+        signatures.signatures.length.toString()
+      )
+      signatures.signatures.forEach((signature, i) => {
+        localStorage.setItem(
+          `poc.new.creation.signatures.${i}`,
+          JSON.stringify({
+            image: signature.image,
+            seed: signature.seed
+          })
+        )
+      })
 
-    router.push('/creations/new')
+      localStorage.setItem('poc.create.query', queryParams)
+      localStorage.setItem('poc.new.creation.data', JSON.stringify(creationData))
+
+      router.push('/creations/new')
+    } catch {
+      toast({
+        variant: 'destructive',
+        className: 'rounded-none p-2',
+        description: 'an error occurred, please try again!'
+      })
+      setIsSaveLoading(false)
+    }
   }
 
   return (
@@ -133,12 +142,12 @@ export default function SignaturesView({
             )}
             {!pathname.includes('creations') && (
               <Button
-                disabled={isShareLoading}
+                disabled={isSaveLoading}
                 onClick={handleSave}
                 type={'button'}
                 className="rounded-none shadow-none hover:bg-foreground w-60"
               >
-                {isShareLoading ? (
+                {isSaveLoading ? (
                   <LoaderCircle className="animate-spin" />
                 ) : (
                   'save to community creations'
