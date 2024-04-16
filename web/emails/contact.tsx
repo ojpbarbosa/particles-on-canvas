@@ -26,36 +26,36 @@ export default function ContactEmail({
   return (
     <Html>
       <Head />
-      <Preview>{message}!</Preview>
+      <Preview>{message.toLowerCase()}!</Preview>
       <Tailwind>
         <Body className="bg-black font-mono">
           <Container className="px-3 mx-auto my-6">
-            <h1 className="bg-white border text-lg w-52 text-center text-black border-gray-600 rounded-none mt-8 px-4 py-2 mb-4">
+            <h1 className="bg-white border text-lg w-56 text-center text-black border-gray-600 rounded-none mt-8 px-4 py-2 mb-4">
               PARTICLES ON CANVAS
             </h1>
             <Text className="text-gray-300 my-6">
-              {fullName} sent the following message from{' '}
+              {fullName.toLowerCase()} sent the following message from{' '}
               <Link
-                href={`mailto:${email}`}
+                href={`mailto:${email.toLowerCase()}`}
                 target="_blank"
                 referrerPolicy="no-referrer"
                 className="text-[#04dcd4] underline"
               >
-                {email}
+                {email.toLowerCase()}
               </Link>{' '}
-              on {date}:
+              on {date.toLowerCase()}:
             </Text>
             <textarea
               readOnly
-              defaultValue={message}
+              defaultValue={message.toLowerCase()}
               rows={7}
-              className="text-sm p-4 resize-none font-mono rows block w-11/12 min-h-20 h-auto bg-black rounded-none border border-gray-600 text-white"
+              className="text-sm lowercase p-4 resize-none font-mono rows block w-11/12 min-h-20 h-auto bg-black rounded-none border border-gray-600 text-white"
             />
             <Text className="text-gray-500 mt-4 mb-6">
               share the message with the other authors before replying.
             </Text>
             <Link
-              href={`mailto:${email}?subject=Particles%20on%20Canvas%20Reply&cc=${authorsMailingList.join(
+              href={`mailto:${email.toLowerCase()}?subject=Particles%20on%20Canvas%20Reply&cc=${authorsMailingList.join(
                 ','
               )}`}
               className="bg-white border text-sm text-black border-gray-600 rounded-none px-4 py-2 my-4"
@@ -76,7 +76,7 @@ export default function ContactEmail({
                 referrerPolicy="no-referrer"
                 className="text-[#04dcd4] underline"
               >
-                Particles on Canvas
+                PARTICLES ON CANVAS
               </Link>
               <br /> creating digital art to further scientific divulgation.
             </Text>
