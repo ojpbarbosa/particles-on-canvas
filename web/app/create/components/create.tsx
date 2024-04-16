@@ -58,16 +58,6 @@ export default function Create() {
   const [minWidthHeight, setMinWidthHeight] = useState(PRODUCTION_MIN_WIDTH_HEIGHT)
   const [maxImages, setMaxImages] = useState(PRODUCTION_MAX_IMAGES)
 
-  useEffect(() => {
-    getServiceType().then((type) => {
-      if (type === 'ngrok') {
-        setMaxWidthHeight(NGROK_MAX_WIDTH_HEIGHT)
-        setMinWidthHeight(NGROK_MIN_WIDTH_HEIGHT)
-        setMaxImages(NGROK_MAX_IMAGES)
-      }
-    })
-  }, [])
-
   const [query, setQuery] = useQueryParams({
     width: withDefault(StringParam, DEFAULT_WIDTH_HEIGHT.toString()),
     height: withDefault(StringParam, DEFAULT_WIDTH_HEIGHT.toString()),
@@ -79,6 +69,33 @@ export default function Create() {
     activation: withDefault(StringParam, 'tanh'),
     particleDataInputs: withDefault(JsonParam, [initialParticleData])
   })
+
+  useEffect(() => {
+    getServiceType()
+      .then((type) => {
+        if (type === 'ngrok') {
+          setMaxWidthHeight(NGROK_MAX_WIDTH_HEIGHT)
+          setMinWidthHeight(NGROK_MIN_WIDTH_HEIGHT)
+          setMaxImages(NGROK_MAX_IMAGES)
+        }
+      })
+      .catch()
+
+    setQuery({
+      ...query,
+      particleDataInputs: query.particleDataInputs.map((data: ParticleData) => {
+        let actualVelocity: string = data.velocity
+        if (parseFloat(actualVelocity) < 1) {
+          actualVelocity = (parseFloat(data.velocity) * 1e10).toString()
+        }
+
+        return {
+          ...data,
+          velocity: actualVelocity
+        }
+      })
+    })
+  }, [])
 
   const { width, height, images, alpha, symmetry, trig, noise, activation, particleDataInputs } =
     query

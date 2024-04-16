@@ -55,5 +55,6 @@ class SignatureService:
             color = color_weights.get(particle_type, 'rgb')
             color_totals[color] += particle_weighted_velocity
 
+        combined_velocity *= len(particles)
         max_color = max(color_totals, key=color_totals.get)
         return (combined_velocity, max_color)
