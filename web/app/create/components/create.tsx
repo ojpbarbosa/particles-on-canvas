@@ -58,6 +58,16 @@ export default function Create() {
   const [minWidthHeight, setMinWidthHeight] = useState(PRODUCTION_MIN_WIDTH_HEIGHT)
   const [maxImages, setMaxImages] = useState(PRODUCTION_MAX_IMAGES)
 
+  useEffect(() => {
+    getServiceType().then((type) => {
+      if (type === 'ngrok') {
+        setMaxWidthHeight(NGROK_MAX_WIDTH_HEIGHT)
+        setMinWidthHeight(NGROK_MIN_WIDTH_HEIGHT)
+        setMaxImages(NGROK_MAX_IMAGES)
+      }
+    })
+  }, [])
+
   const [query, setQuery] = useQueryParams({
     width: withDefault(StringParam, DEFAULT_WIDTH_HEIGHT.toString()),
     height: withDefault(StringParam, DEFAULT_WIDTH_HEIGHT.toString()),
@@ -112,10 +122,14 @@ export default function Create() {
     setQuery({ ...query, [name]: value })
   }
 
-  function validateValue(event: FocusEvent<HTMLInputElement, Element>) {
+  function validateInputEvent(event: FocusEvent<HTMLInputElement, Element>) {
     // eslint-disable-next-line prefer-const
     let { name, value } = event.target
 
+    validateValue(name, value)
+  }
+
+  function validateValue(name: string, value: string) {
     if (name === 'width' || name === 'height') {
       if (parseInt(value) > maxWidthHeight) {
         value = maxWidthHeight.toString()
@@ -163,6 +177,18 @@ export default function Create() {
     try {
       setCreationLoading(true)
 
+      getServiceType().then((type) => {
+        if (type === 'ngrok') {
+          setMaxWidthHeight(NGROK_MAX_WIDTH_HEIGHT)
+          setMinWidthHeight(NGROK_MIN_WIDTH_HEIGHT)
+          setMaxImages(NGROK_MAX_IMAGES)
+        }
+
+        validateValue('width', width)
+        validateValue('height', height)
+        validateValue('images', images)
+      })
+
       localStorage.clear()
       localStorage.setItem('poc.create.query', location.search)
 
@@ -177,7 +203,7 @@ export default function Create() {
         activation,
         particles: particleDataInputs.map((input: ParticleData) => ({
           particle: input.particle,
-          velocity: parseFloat(input.velocity),
+          velocity: parseFloat((parseInt(input.velocity) * 1e-10).toFixed(10)),
           priority: parseInt(input.priority)
         }))
       }
@@ -204,14 +230,6 @@ export default function Create() {
         parseFloat(input.velocity) > 0
     )
     setUnableToCreate(isValidInput)
-
-    getServiceType().then((type) => {
-      if (type === 'ngrok') {
-        setMaxWidthHeight(NGROK_MAX_WIDTH_HEIGHT)
-        setMinWidthHeight(NGROK_MIN_WIDTH_HEIGHT)
-        setMaxImages(NGROK_MAX_IMAGES)
-      }
-    })
   }, [particleDataInputs])
 
   return (
@@ -302,7 +320,7 @@ export default function Create() {
                                   max={maxImages}
                                   value={images}
                                   onChange={handleConfigurationChange}
-                                  onBlur={validateValue}
+                                  onBlur={validateInputEvent}
                                 />
                                 <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                                   how many images will be created
@@ -326,7 +344,7 @@ export default function Create() {
                                   max={maxWidthHeight}
                                   value={width}
                                   onChange={handleConfigurationChange}
-                                  onBlur={validateValue}
+                                  onBlur={validateInputEvent}
                                 />
                                 <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                                   final image width (px)
@@ -350,7 +368,7 @@ export default function Create() {
                                   max={maxWidthHeight}
                                   value={height}
                                   onChange={handleConfigurationChange}
-                                  onBlur={validateValue}
+                                  onBlur={validateInputEvent}
                                 />
                                 <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
                                   final image height (px)

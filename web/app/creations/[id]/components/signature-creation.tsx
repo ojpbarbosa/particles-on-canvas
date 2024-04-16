@@ -50,7 +50,7 @@ export default async function SignatureCreation({ id }: SignatureCreationProps) 
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">
                 particles <br />
-                [velocity (cm per ps), priority]
+                [velocity (cm/ps), priority]
               </p>
               <div className="text-sm flex flex-col gap-y-1 font-semibold tracking-tight">
                 {signature.particles.map((particle, i) => (

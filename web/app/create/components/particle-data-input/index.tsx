@@ -14,8 +14,8 @@ type ParticleDataInputProps = {
   index: number
 }
 
-const MIN_VELOCITY = 0.0000000001
-const MAX_VELOCITY = 0.0299792458
+const MIN_VELOCITY = 1
+const MAX_VELOCITY = 299792458
 
 export default function ParticleDataInput({
   availableParticles,
@@ -44,10 +44,16 @@ export default function ParticleDataInput({
 
       toast({
         className: 'rounded-none p-2',
-        description: `maximum velocity is ${MAX_VELOCITY} cm per ps - the speed of light!`
+        description: `maximum velocity is ${MAX_VELOCITY} m/s - the speed of light!`
       })
     } else if (!event.target.value) {
       setParticleData(index, 'velocity', MIN_VELOCITY.toString())
+    } else if (event.target.value.length !== MIN_VELOCITY.toString().length) {
+      setParticleData(
+        index,
+        'velocity',
+        event.target.value.padEnd(MIN_VELOCITY.toString().length, '0')
+      )
     }
   }
 
@@ -72,7 +78,7 @@ export default function ParticleDataInput({
           </div>
           <div>
             <div className="flex flex-col gap-y-3 w-36">
-              <Label className="font-normal">velocity</Label>
+              <Label className="font-normal">velocity (m/s)</Label>
               <Input
                 type="number"
                 className={cn(
@@ -81,13 +87,12 @@ export default function ParticleDataInput({
                 )}
                 min={MIN_VELOCITY}
                 max={MAX_VELOCITY}
-                step={0.0000001}
                 value={particleData.velocity}
                 onChange={handleVelocityChange}
                 onBlur={validateValue}
               />
               <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
-                cm per ps
+                {(parseInt(particleData.velocity) * 1e-10).toFixed(10)} cm/ps
               </p>
             </div>
           </div>

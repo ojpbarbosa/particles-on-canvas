@@ -34,7 +34,7 @@ export default async function Signature({ slug }: SignatureProps) {
               <p className="text-sm font-semibold tracking-tight">{signature.interpreter}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">velocity (cm per ps)</p>
+              <p className="text-sm text-muted-foreground">velocity (cm/ps)</p>
               <p className="text-sm font-semibold tracking-tight">
                 {signature.velocity}{' '}
                 <span className="text-muted-foreground">
