@@ -86,7 +86,7 @@ export default function Create() {
       particleDataInputs: query.particleDataInputs.map((data: ParticleData) => {
         let actualVelocity: string = data.velocity
         if (parseFloat(actualVelocity) < 1) {
-          actualVelocity = (parseFloat(data.velocity) * 1e10).toString()
+          actualVelocity = Math.round(parseFloat(data.velocity) * 1e10).toString()
         }
 
         return {
