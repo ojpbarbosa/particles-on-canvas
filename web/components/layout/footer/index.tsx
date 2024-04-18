@@ -85,7 +85,7 @@ export default function Footer() {
             </div>
           </div>
           <Theme />
-          <div className="flex flex-col gap-y-12 sm:gap-y-3">
+          <div className="flex flex-col gap-y-8 sm:gap-y-3">
             <Status />
             <div className="flex flex-col gap-y-2 md:gap-y-3">
               <h4 className="text-sm font-medium sm:-mt-0.5">disclaimer</h4>
