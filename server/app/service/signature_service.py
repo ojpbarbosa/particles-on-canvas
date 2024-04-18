@@ -10,7 +10,7 @@ class SignatureService:
 
     def create_signatures(self, particles: List[Dict], n_images: int,
                           image_height: int, image_width: int, symmetry: bool,
-                          trig: bool, alpha: bool, noise: bool, activation: str) -> tuple[List[int], int, str, List]:
+                          trig: bool, alpha: bool, noise: bool, activation: str, save: bool) -> tuple[List[int], int, str, List]:
         signatures = []
 
         combined_velocity, color_mode = self._get_signature_color_mode(
@@ -21,10 +21,13 @@ class SignatureService:
             seed, image_bytes = self.signature_repository.create_signature(layer_dimensions, color_mode, image_height, image_width, symmetry,
                                                                            trig, alpha, noise, activation)
 
-            image_path = self.bucket_repository.upload_signature(
-                f'{seed}.png', image_bytes, 'image/png')
+            if save:
+                image_path = self.bucket_repository.upload_signature(
+                    f'{seed}.png', image_bytes, 'image/png')
 
-            signatures.append((seed, image_path))
+                signatures.append((seed, image_path))
+            else:
+                signatures.append((seed, ''))
 
         return (layer_dimensions, combined_velocity, color_mode, signatures)
 

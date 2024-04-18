@@ -30,7 +30,9 @@ export default function SignatureDetails({ signatures, creations = false }: Sign
       </div>
       <div className="space-y-1 min-w-32">
         <p className="text-sm text-muted-foreground">combined velocity (cm/ps)</p>
-        <p className="text-sm font-semibold tracking-tight">{signatures.combinedVelocity}</p>
+        <p className="text-sm font-semibold tracking-tight">
+          {signatures.combinedVelocity.toFixed(10)}
+        </p>
       </div>
       <div className="space-y-1 min-w-52">
         <p className="text-sm text-muted-foreground">layer dimensions</p>

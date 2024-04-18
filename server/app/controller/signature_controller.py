@@ -20,24 +20,25 @@ class SignatureController:
         image_height = int(data.get('height', 512))
         if image_height < 64:
             image_height = 64
-        elif image_height > 1280:
-            image_height = 1280
+        elif image_height > 1920:
+            image_height = 1920
 
         image_width = int(data.get('width', 512))
         if image_width < 64:
             image_width = 64
-        elif image_width > 1280:
-            image_width = 1280
+        elif image_width > 2048:
+            image_width = 2048
 
         symmetry = data.get('symmetry', False)
         trig = data.get('trig', False)
         alpha = data.get('alpha', False)
         noise = data.get('noise', False)
+        save = data.get('save', True)
 
         activation = data.get('activation', 'tanh')
 
         layer_dimensions, combined_velocity, color_mode, signatures = self.signature_service.create_signatures(
-            particles, n_images, image_height, image_width, symmetry, trig, alpha, noise, activation
+            particles, n_images, image_height, image_width, symmetry, trig, alpha, noise, activation, save
         )
 
         def split_signatures(signature_tuple):

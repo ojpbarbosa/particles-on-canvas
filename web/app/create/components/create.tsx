@@ -39,11 +39,11 @@ const DEFAULT_WIDTH_HEIGHT = 512
 
 const PRODUCTION_MAX_WIDTH_HEIGHT = 768
 const PRODUCTION_MIN_WIDTH_HEIGHT = 64
-const PRODUCTION_MAX_IMAGES = 10
+const PRODUCTION_MAX_IMAGES = 1
 
-const NGROK_MAX_WIDTH_HEIGHT = 1280
+const NGROK_MAX_WIDTH_HEIGHT = 1920
 const NGROK_MIN_WIDTH_HEIGHT = 64
-const NGROK_MAX_IMAGES = 2
+const NGROK_MAX_IMAGES = 5
 
 export default function Create() {
   const initialParticleData: ParticleData = {
