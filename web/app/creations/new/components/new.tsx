@@ -190,7 +190,7 @@ export default function Contact() {
                     save your signatures to community creations
                   </h4>
                   <p className="text-sm text-muted-foreground tracking-tight">
-                    fill in the form bellow to save your creations.
+                    fill in the form below to save your creations.
                   </p>
                 </div>
                 <div className="flex w-full items-start gap-y-4 justify-center flex-col">

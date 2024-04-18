@@ -120,7 +120,7 @@ export default function Contact() {
                   contact us
                 </h4>
                 <p className="text-sm text-muted-foreground tracking-tight">
-                  fill in the form bellow and we{"'"}ll get back to you as soon as possible.
+                  fill in the form below and we{"'"}ll get back to you as soon as possible.
                 </p>
               </div>
               <div className="flex w-full items-start gap-y-4 justify-center flex-col">

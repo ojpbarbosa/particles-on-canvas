@@ -280,9 +280,9 @@ export default function Create() {
                   create your own experiment signature
                 </h4>
                 <p className="text-sm text-muted-foreground tracking-tight">
-                  fill in the desired parameters bellow to create your very own signatures. note
-                  that each particle has a precedence priority; the higher it is, the most influence
-                  it will have on the final signatures. refer to the paper section{' '}
+                  fill in the desired parameters below to create your very own signatures. note that
+                  each particle has a precedence priority; the higher it is, the most influence it
+                  will have on the final signatures. refer to the paper section{' '}
                   <Link
                     href={'/paper#data-driven-art-creation'}
                     className="text-[#085fce]/75 hover:text-[#085fce] dark:text-[#04dcd4]/75 hover:dark:text-[#04dcd4] transition-colors duration-100 underline underline-offset-4"
