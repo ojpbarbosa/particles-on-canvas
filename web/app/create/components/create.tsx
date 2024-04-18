@@ -240,7 +240,7 @@ export default function Create() {
     } finally {
       setCreationLoading(false)
 
-      const thirtyMinutesAgo = new Date(new Date().getTime() - 0.2 * 60 * 1000).toISOString()
+      const thirtyMinutesAgo = new Date(new Date().getTime() - 30 * 60 * 1000).toISOString()
 
       const { data, error } = await supabase
         .from('uploads')
