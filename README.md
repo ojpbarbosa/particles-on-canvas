@@ -10,12 +10,16 @@
 
 <br />
 
-Introducing the Particles on Canvas project for the [Beamline for Schools Competition](https://beamlineforschools.cern) 2024: creating digital art to further scientific divulgation. We've designed a unique methodology that merges the realms of art and science, transforming complex scientific data into captivating digital artwork. By converting experimental data into visually intuitive and engaging art, we make the intricacies of science accessible and fascinating to all. Our approach not only bridges the gap between these two disciplines but also enhances public engagement and stimulates a creative dialogue around scientific discoveries.
+Particles on Canvas is project-proposal for the [Beamline for Schools Competition](https://beamlineforschools.cern) 2024: creating digital art to further scientific divulgation. By converting experimental data into visually intuitive and engaging art, Particles on Canvas offers a way to make the intricacies of science accessible and fascinating to all, merging the realms of art and science and transforming complex scientific data into captivating digital artwork.
 
-For further information, please [refer to the paper](https://particles-on-canvas.vercel.app/paper).
+For further information, please [refer to the paper](https://particles-on-canvas.vercel.app/paper) or [the website](https://particles-on-canvas.vercel.app).
+
+## Architecture Overview
+
+![Overview image](https://github.com/ojpbarbosa/particles-on-canvas/assets/79005271/65bfc580-48df-40a5-bfff-cb5274bf8c21)
 
 ## Team
-Particles on Canvas was designed by:
+Particles on Canvas was created by:
 - [Beatriz Juliato Coutinho](https://github.com/biaacoutinho)
 - [Éric Carvalho Figueira](https://github.com/eric-figueira)
 - [Gabriel Willian Bartmanovicz](https://github.com/obielwb)
@@ -26,4 +30,4 @@ Particles on Canvas was designed by:
 - [Nicolas Militão Livotto](https://github.com/nimilitao)
 
 ## License
-Particles on Canvas is licensed under the [MIT License](https://github.com/ojpbarbosa/particles-on-canvas/blob/main/LICENSE). This means you are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the platform, provided that you include the original copyright notice and this permission notice in all copies or substantial portions of the platform. There are no restrictions on using the software for commercial purposes, and you are not required to release derivative works under the same license.
+Particles on Canvas is licensed under the [MIT License](https://github.com/ojpbarbosa/particles-on-canvas/blob/main/LICENSE).
