@@ -1,13 +1,21 @@
 import { heartbeat } from '@/lib/api'
 import { cn } from '@/lib/utils'
+import { Zap, ZapOff } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function Status() {
   const [status, setStatus] = useState('experiencing downtime')
+  const [accelerated, setAccelarated] = useState(false)
 
   useEffect(() => {
     heartbeat()
-      .then(() => setStatus('all systems operational'))
+      .then((type) => {
+        setStatus('all systems operational')
+
+        if (type === 'ngrok') {
+          setAccelarated(true)
+        }
+      })
       .catch(() => setStatus('down'))
   }, [])
 
@@ -31,6 +39,20 @@ export default function Status() {
           {status}
         </p>
       </div>
+
+      <p className="text-muted-foreground h-4 flex items-start md:items-center text-sm font-normal transition-colors duration-200">
+        {accelerated ? (
+          <>
+            <Zap className="md:-ml-2 -ml-1 mr-1 mt-0.5 md:mt-0 md:mr-0" height={17} /> create is
+            currently using hardware acceleration
+          </>
+        ) : (
+          <>
+            <ZapOff className="md:-ml-2 -ml-1 mr-1 mt-0.5 md:mt-0 md:mr-0" height={17} /> create is
+            currently using slow hardware
+          </>
+        )}
+      </p>
     </div>
   )
 }

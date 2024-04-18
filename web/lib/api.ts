@@ -95,5 +95,6 @@ export async function createSignatures(body: CreateSignaturesBody): Promise<Sign
 }
 
 export async function heartbeat() {
-  await getService()
+  const type = await getServiceType()
+  return type
 }
