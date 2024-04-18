@@ -65,7 +65,6 @@ export default function Contact() {
   const [loading, setLoading] = useState(false)
   const [newCreation, setNewCreation] = useState({} as Signatures)
   const [creationQuery, setCreationQuery] = useState('')
-  const [signaturesCount, setSignaturesCount] = useState(0)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [creationData, setCreationData] = useState({} as any)
 
@@ -75,25 +74,9 @@ export default function Contact() {
   const supabase = createClient()
 
   useEffect(() => {
-    const signatures: { image: string; seed: string }[] = []
-
-    const count = localStorage.getItem('poc.new.creation.signatures.count')
-    if (count) {
-      setSignaturesCount(parseInt(count))
-      for (let i = 0; i < parseInt(count); i++) {
-        const signature = localStorage.getItem(`poc.new.creation.signatures.${i}`)
-        if (signature) {
-          signatures.push(JSON.parse(signature))
-        }
-      }
-    } else {
-      clearLocalStorage()
-      router.push('/creations')
-    }
-
     const creation = localStorage.getItem('poc.new.creation')
     if (creation) {
-      setNewCreation({ ...JSON.parse(creation), signatures })
+      setNewCreation(JSON.parse(creation))
     } else {
       clearLocalStorage()
       router.push('/creations')
@@ -132,91 +115,56 @@ export default function Contact() {
   const { isValid } = useFormState({ control: form.control })
 
   function clearLocalStorage() {
-    for (let i = 0; i < signaturesCount; i++) {
-      localStorage.removeItem(`poc.new.creation.signatures.${i}`)
-    }
-    ;[
-      'poc.new.creation.signatures.count',
-      'poc.new.creation',
-      'poc.create.query',
-      'poc.new.creation.data'
-    ].forEach((key) => localStorage.removeItem(key))
+    ;['poc.new.creation', 'poc.create.query', 'poc.new.creation.data'].forEach((key) =>
+      localStorage.removeItem(key)
+    )
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true)
 
     try {
-      const paths = await Promise.all(
-        newCreation.signatures.map(async ({ seed, image }) => {
-          const { data, error } = await supabase.storage
-            .from('signatures')
-            .upload(`${seed}.png`, Buffer.from(image, 'base64'), {
-              contentType: 'image/png'
-            })
+      const { public: isCreationPublic, email, firstName, lastName, creationName } = values
+      const { combinedVelocity, layerDimensions, strategy, signatures } = newCreation
 
-          if (error) {
-            console.error(error)
-
-            toast({
-              variant: 'destructive',
-              className: 'rounded-none p-2',
-              description: 'an error occurred!'
-            })
-          }
-
-          return data?.path
+      const { data, error } = await supabase
+        .from('signatures')
+        .insert({
+          creation_query: creationQuery,
+          combined_velocity: combinedVelocity,
+          strategy,
+          layer_dimensions: layerDimensions,
+          public: isCreationPublic,
+          signatures: signatures.map(({ image }) => image),
+          creator_first_name: firstName,
+          creator_last_name: lastName,
+          creator_email: email,
+          creation_name: creationName,
+          ...creationData
         })
-      )
+        .select()
 
-      const bucketImages = paths.map((path) => {
-        const { data } = supabase.storage.from('signatures').getPublicUrl(path!)
+      const { error: verifyUploadError } = await supabase
+        .from('uploads')
+        .update({ verified: true })
+        .in(
+          'name',
+          signatures.map(({ seed }) => `${seed}.png`)
+        )
 
-        return data.publicUrl
-      })
-
-      if (bucketImages) {
-        const { public: isCreationPublic, email, firstName, lastName, creationName } = values
-        const { combinedVelocity, layerDimensions, strategy } = newCreation
-
-        const { data, error } = await supabase
-          .from('signatures')
-          .insert({
-            creation_query: creationQuery,
-            combined_velocity: combinedVelocity,
-            strategy,
-            layer_dimensions: layerDimensions,
-            public: isCreationPublic,
-            signatures: bucketImages,
-            creator_first_name: firstName,
-            creator_last_name: lastName,
-            creator_email: email,
-            creation_name: creationName,
-            ...creationData
-          })
-          .select()
-
-        if (error) {
-          console.error(error)
-          toast({
-            variant: 'destructive',
-            className: 'rounded-none p-2',
-            description: 'an error occurred!'
-          })
-        } else {
-          clearLocalStorage()
-
-          const { id } = data[0]!
-
-          router.push(`/creations/${id}`)
-        }
-      } else {
-        console.error('error')
+      if (error || verifyUploadError) {
+        console.error(error)
         toast({
           variant: 'destructive',
           className: 'rounded-none p-2',
-          description: 'an error occurred!'
+          description: 'an error occurred, please try!'
         })
+      } else {
+        clearLocalStorage()
+
+        const { id } = data[0]!
+
+        router.push(`/creations/${id}`)
       }
     } catch (error) {
       console.error(error)

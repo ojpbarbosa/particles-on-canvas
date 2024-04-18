@@ -52,40 +52,28 @@ export default function SignaturesView({
     setIsSaveLoading(true)
 
     try {
-      const { combinedVelocity, layerDimensions, strategy } = signatures
+      const {
+        combinedVelocity,
+        layerDimensions,
+        strategy,
+        signatures: createdSignatures
+      } = signatures
 
       localStorage.setItem(
         'poc.new.creation',
         JSON.stringify({
           combinedVelocity,
           layerDimensions,
-          strategy
+          strategy,
+          signatures: createdSignatures
         })
       )
-
-      localStorage.setItem(
-        'poc.new.creation.signatures.count',
-        signatures.signatures.length.toString()
-      )
-      signatures.signatures.forEach((signature, i) => {
-        localStorage.setItem(
-          `poc.new.creation.signatures.${i}`,
-          JSON.stringify({
-            image: signature.image,
-            seed: signature.seed
-          })
-        )
-      })
 
       localStorage.setItem('poc.create.query', queryParams)
       localStorage.setItem('poc.new.creation.data', JSON.stringify(creationData))
 
       router.push('/creations/new')
     } catch {
-      signatures.signatures.forEach((_, i) => {
-        localStorage.removeItem(`poc.new.creation.signatures.${i}`)
-      })
-
       toast({
         variant: 'destructive',
         className: 'rounded-none p-2',
@@ -103,17 +91,9 @@ export default function SignaturesView({
           {signatures.signatures.map(({ image, seed }, i) => (
             <div key={seed} className="flex flex-col w-full gap-y-8">
               <div className="flex items-start flex-col w-full gap-y-4">
-                <img
-                  className="max-w-full max-h-full"
-                  src={`${!creations ? 'data:image/png;base64,' : ''}${image}`}
-                />
+                <img className="max-w-full max-h-full" src={image} />
                 <div className="w-full flex flex-col gap-y-3">
-                  <Link
-                    target="_blank"
-                    referrerPolicy="no-referrer"
-                    href={`${!creations ? 'data:image/png;base64,' : ''}${image}`}
-                    className="w-40"
-                  >
+                  <Link target="_blank" referrerPolicy="no-referrer" href={image} className="w-40">
                     <Button
                       className="dark:border-muted px-4 shadow-none bg-background hover:bg-background flex h-9 items-center justify-start gap-x-2 rounded-none border border-neutral-200"
                       variant={'secondary'}

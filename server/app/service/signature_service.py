@@ -1,10 +1,12 @@
 from typing import Dict, List
 from app.repository.signature_repository import SignatureRepository
+from app.repository.bucket_repository import BucketRepository
 
 
 class SignatureService:
-    def __init__(self, repository: SignatureRepository):
-        self.repository = repository
+    def __init__(self, signature_repository: SignatureRepository, bucket_repository: BucketRepository):
+        self.signature_repository = signature_repository
+        self.bucket_repository = bucket_repository
 
     def create_signatures(self, particles: List[Dict], n_images: int,
                           image_height: int, image_width: int, symmetry: bool,
@@ -16,8 +18,13 @@ class SignatureService:
         layer_dimensions = [10] * (len(particles) + 2)
 
         for _ in range(n_images):
-            signatures.append(self.repository.create_signature(layer_dimensions, color_mode, image_height, image_width, symmetry,
-                                                               trig, alpha, noise, activation))
+            seed, image_bytes = self.signature_repository.create_signature(layer_dimensions, color_mode, image_height, image_width, symmetry,
+                                                                           trig, alpha, noise, activation)
+
+            image_path = self.bucket_repository.upload_signature(
+                f'{seed}.png', image_bytes, 'image/png')
+
+            signatures.append((seed, image_path))
 
         return (layer_dimensions, combined_velocity, color_mode, signatures)
 

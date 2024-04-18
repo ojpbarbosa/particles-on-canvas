@@ -24,6 +24,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from '@/components/ui/use-toast'
 import { type Signatures, createSignatures, getServiceType } from '@/lib/api'
 import SignaturesView from '@/app/components/signatures-view'
+import { createClient } from '@/utils/supabase/client'
 
 export type ParticleData = {
   particle: string
@@ -38,7 +39,7 @@ const DEFAULT_WIDTH_HEIGHT = 512
 
 const PRODUCTION_MAX_WIDTH_HEIGHT = 768
 const PRODUCTION_MIN_WIDTH_HEIGHT = 64
-const PRODUCTION_MAX_IMAGES = 2
+const PRODUCTION_MAX_IMAGES = 10
 
 const NGROK_MAX_WIDTH_HEIGHT = 1280
 const NGROK_MIN_WIDTH_HEIGHT = 64
@@ -57,6 +58,8 @@ export default function Create() {
   const [maxWidthHeight, setMaxWidthHeight] = useState(PRODUCTION_MAX_WIDTH_HEIGHT)
   const [minWidthHeight, setMinWidthHeight] = useState(PRODUCTION_MIN_WIDTH_HEIGHT)
   const [maxImages, setMaxImages] = useState(PRODUCTION_MAX_IMAGES)
+
+  const supabase = createClient()
 
   const [query, setQuery] = useQueryParams({
     width: withDefault(StringParam, DEFAULT_WIDTH_HEIGHT.toString()),
@@ -236,6 +239,23 @@ export default function Create() {
       })
     } finally {
       setCreationLoading(false)
+
+      const thirtyMinutesAgo = new Date(new Date().getTime() - 0.2 * 60 * 1000).toISOString()
+
+      const { data, error } = await supabase
+        .from('uploads')
+        .select('*', { count: 'exact' })
+        .eq('verified', false)
+        .eq('deleted', false)
+        .lte('created_at', thirtyMinutesAgo)
+
+      if (!error) {
+        const idsToDelete = data.map(({ id }) => id)
+        const signaturesToDelete = data.map(({ name }) => name)
+
+        await supabase.from('uploads').update({ deleted: true }).in('id', idsToDelete)
+        await supabase.storage.from('signatures').remove(signaturesToDelete)
+      }
     }
   }
 
@@ -567,7 +587,7 @@ export default function Create() {
                   </div>
                 </div>
               </form>
-              {signatures.combinedVelocity && (
+              {signatures.combinedVelocity && !creationLoading && (
                 <SignaturesView
                   signatures={signatures}
                   queryParams={location.search}
