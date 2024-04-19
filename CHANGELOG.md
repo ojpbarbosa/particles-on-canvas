@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/ojpbarbosa/particles-on-canvas/compare/v1.0.0-beta.0...v1.0.0) (2024-04-19)
+
+
+### Features
+
+* improve storage of images ([92a2af4](https://github.com/ojpbarbosa/particles-on-canvas/commit/92a2af4f72c08264fbb0808d8fcec280416ac874))
+* increase image size limitation ([9ffa74c](https://github.com/ojpbarbosa/particles-on-canvas/commit/9ffa74c530484620b3143fc1b75b12cb789621c4))
+* properly handle velocities ([c8562d5](https://github.com/ojpbarbosa/particles-on-canvas/commit/c8562d5b3df0e41eaa8ca053e1fcfdea82cc498d))
+* **scripts:** improve keep-alive ([0eca2c8](https://github.com/ojpbarbosa/particles-on-canvas/commit/0eca2c80f6a1a4f9f8ed9c23450e15fecb077cc6))
+* **server:** setup wsgi ([182df2c](https://github.com/ojpbarbosa/particles-on-canvas/commit/182df2c58c553511abf371769dc9fa0701fb356f))
+* **web:** add hardware type to footer ([ea59c91](https://github.com/ojpbarbosa/particles-on-canvas/commit/ea59c9118ae1dda4560049451fd6bb4b68854d87))
+* **web:** improve bucket clean up ([13c709a](https://github.com/ojpbarbosa/particles-on-canvas/commit/13c709a5bc64ee751160b82c6771468fd82a1305))
+* **web:** improve contact email ui ([5273623](https://github.com/ojpbarbosa/particles-on-canvas/commit/5273623a3420cb76b29015f3849ecf3ed5f75286))
+* **web:** improve create ui ([ea47ddc](https://github.com/ojpbarbosa/particles-on-canvas/commit/ea47ddc31d7275ac0eacb44806fe1fd575ae8e2c))
+* **web:** improve footer ui ([8b7f9db](https://github.com/ojpbarbosa/particles-on-canvas/commit/8b7f9dbe805ccc83ab79ba3fb249d57fdbb009fd))
+* **web:** round query velocities ([c4c27c9](https://github.com/ojpbarbosa/particles-on-canvas/commit/c4c27c9a3d4b61e86a391a92cd27db19124091b1))
+* **web:** use proper time for storage clean up ([1bfcd77](https://github.com/ojpbarbosa/particles-on-canvas/commit/1bfcd7721a293e8f508761a04f4af724783b31e1))
+
+
+### Bug Fixes
+
+* **web:** handle less ngrok images ([bc4884b](https://github.com/ojpbarbosa/particles-on-canvas/commit/bc4884b7d30aee4b1b72dbd34181b3d40df152f5))
+* **web:** improve localStorage usage ([6f31b37](https://github.com/ojpbarbosa/particles-on-canvas/commit/6f31b3718c1ff10f1b97df670f05880f500374d3))
+
 ## [1.0.0-beta.0](https://github.com/ojpbarbosa/particles-on-canvas/compare/v1.1.0...v1.0.0-beta.0) (2024-04-15)
 
 
