@@ -251,10 +251,14 @@ export default function Create() {
 
       if (!error) {
         const idsToDelete = data.map(({ id }) => id)
-        const signaturesToDelete = data.map(({ name }) => name)
+        if (idsToDelete.length > 0) {
+          await supabase.from('uploads').update({ deleted: true }).in('id', idsToDelete)
+        }
 
-        await supabase.from('uploads').update({ deleted: true }).in('id', idsToDelete)
-        await supabase.storage.from('signatures').remove(signaturesToDelete)
+        const signaturesToDelete = data.map(({ name }) => name)
+        if (signaturesToDelete.length > 0) {
+          await supabase.storage.from('signatures').remove(signaturesToDelete)
+        }
       }
     }
   }
