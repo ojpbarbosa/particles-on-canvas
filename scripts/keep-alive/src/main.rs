@@ -1,8 +1,12 @@
+use chrono::Local;
+use colored::*;
+use log::{error, info, warn};
+use pretty_env_logger;
 use serde::{Deserialize, Serialize};
+use std::env;
 use std::time::Instant;
 
 const SERVICE_URL: &str = "https://particles-on-canvas.onrender.com";
-
 const KEEP_ALIVE_SECONDS_TIMEOUT: u64 = 60 * 3; // 3 minutes
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -21,60 +25,101 @@ struct Signature {
     seed: String,
 }
 
+#[derive(Serialize)]
+struct CreateSignatureRequest {
+    save: bool,
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    env::set_var("RUST_LOG", "info");
+    pretty_env_logger::init();
+
     loop {
-        let mut now = chrono::Local::now();
-        println!(
-            "Keeping \x1b[34mParticles on Canvas\x1b[0m alive on {}\x1b[0m",
-            now.format("%B %-d, %Y, %H:%M").to_string()
+        let now = Local::now();
+        info!(
+            "Keeping {} alive on {}",
+            "Particles on Canvas".bright_blue(),
+            now.format("%B %-d, %Y, %H:%M")
         );
 
-        let mut start_time = Instant::now();
-        let mut status = reqwest::get(format!("{}/heartbeat", SERVICE_URL))
+        let start_time = Instant::now();
+        let status = reqwest::get(format!("{}/heartbeat", SERVICE_URL))
             .await?
             .status();
-        let mut elapsed_time = start_time.elapsed();
-        now = chrono::Local::now();
+        let elapsed_time = start_time.elapsed();
 
-        if status == reqwest::StatusCode::NO_CONTENT {
-            println!(
-                // add green print
-                "Heartbeat received at {} ({} ms)\n",
-                now.format("%H:%M:%S").to_string(),
-                elapsed_time.as_millis()
-            );
-        } else {
-            println!(
-                // add red print
-                "Heartbeat failed at {} ({} ms)\n",
-                now.format("%H:%M:%S").to_string(),
-                elapsed_time.as_millis()
-            );
+        match status {
+            reqwest::StatusCode::NO_CONTENT => {
+                info!(
+                    "Heartbeat {} at {} ({} ms)",
+                    "received".green(),
+                    now.format("%H:%M:%S"),
+                    elapsed_time.as_millis()
+                );
+            }
+            _ => {
+                warn!(
+                    "Heartbeat {} at {} ({} ms)",
+                    "failed".red(),
+                    now.format("%H:%M:%S"),
+                    elapsed_time.as_millis()
+                );
+            }
         }
 
-        start_time = Instant::now();
-        create_signatures_request();
-        elapsed_time = start_time.elapsed();
-        // if ok, then log ok
-
+        create_signatures_request().await;
         tokio::time::sleep(tokio::time::Duration::from_secs(KEEP_ALIVE_SECONDS_TIMEOUT)).await;
     }
 }
 
 async fn create_signatures_request() {
     let url = format!("{}/signatures/create", SERVICE_URL);
-    match reqwest::Client::new().post(&url).send().await {
+    let body = CreateSignatureRequest { save: false };
+    let client = reqwest::Client::new();
+
+    let start_time = Instant::now();
+
+    match client.post(&url).json(&body).send().await {
         Ok(response) => {
             if response.status().is_success() {
-                let signatures = response.json::<Signatures>().await;
-                println!("Signatures received successfully: {:?}", signatures);
+                match response.json::<Signatures>().await {
+                    Ok(_signatures) => {
+                        let now = Local::now();
+                        info!(
+                            "Signatures {} at {} ({} ms)",
+                            "received".green(),
+                            now.format("%H:%M:%S"),
+                            start_time.elapsed().as_millis()
+                        );
+                    }
+                    Err(err) => {
+                        let now = Local::now();
+                        warn!(
+                            "{} signatures at {} ({} ms), error: {:?}",
+                            "Failed to create".red(),
+                            now.format("%H:%M:%S"),
+                            start_time.elapsed().as_millis(),
+                            err
+                        );
+                    }
+                }
             } else {
-                println!("Request failed with status code: {}", response.status());
+                error!(
+                    "{} after {} ms with status code: {}",
+                    "Request failed".red(),
+                    start_time.elapsed().as_millis(),
+                    response.status()
+                );
             }
         }
         Err(err) => {
-            println!("Error occurred while sending request: {:?}", err);
+            error!(
+                "{} while sending request after {} ms: {:?}",
+                "An error occurred".red(),
+                start_time.elapsed().as_millis(),
+                err
+            );
         }
     }
 }
