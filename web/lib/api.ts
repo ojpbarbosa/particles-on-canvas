@@ -41,7 +41,7 @@ async function fetchWithTimeout(resource: string, options: any = {}) {
   return response
 }
 
-async function getService(): Promise<string> {
+async function getService(): Promise<string | undefined> {
   try {
     try {
       if (NGROK_SERVICE_URL) {
@@ -64,37 +64,65 @@ async function getService(): Promise<string> {
     }
 
     return PRODUCTION_SERVICE_URL
-  } catch {
-    throw new Error('Could not reach service')
-  }
+  } catch {}
 }
 
-export async function getServiceType(): Promise<'ngrok' | 'production'> {
+export async function getServiceType(): Promise<'ngrok' | 'production' | undefined> {
   const service = await getService()
 
-  if (service === NGROK_SERVICE_URL) {
-    return 'ngrok'
+  if (service) {
+    if (service === NGROK_SERVICE_URL) {
+      return 'ngrok'
+    }
+
+    return 'production'
   }
-
-  return 'production'
 }
 
-export async function createSignatures(body: CreateSignaturesBody): Promise<Signatures> {
+export async function createSignatures(
+  body: CreateSignaturesBody
+): Promise<Signatures | undefined> {
   const currentService = await getService()
-  const response = await fetchWithTimeout(`${currentService}/signatures/create`, {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    timeout: 10 * 1000 * 60
-  })
 
-  const data = await response.json()
-  return data
+  if (currentService) {
+    const response = await fetchWithTimeout(`${currentService}/signatures/create`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 10 * 1000 * 60
+    })
+
+    const data = await response.json()
+    return data
+  }
 }
 
-export async function heartbeat() {
-  const type = await getServiceType()
-  return type
+export enum SystemStatus {
+  Downtime = 'experiencing downtime',
+  Operational = 'all systems operational',
+  Down = 'systems down'
+}
+
+export enum HardwareStatus {
+  Standard = 'using standard hardware',
+  Accelerated = 'using hardware acceleration',
+  None = 'no hardware available'
+}
+
+export async function getStatuses(): Promise<(SystemStatus | HardwareStatus)[] | undefined> {
+  return getServiceType()
+    .then((type) => {
+      if (type === 'production') {
+        return [SystemStatus.Operational, HardwareStatus.Standard]
+      } else if (type === 'ngrok') {
+        return [SystemStatus.Operational, HardwareStatus.Accelerated]
+      } else {
+        return [SystemStatus.Down, HardwareStatus.None]
+      }
+    })
+    .catch(() => {
+      return [SystemStatus.Down, HardwareStatus.None]
+    })
 }

@@ -22,7 +22,13 @@ import {
 import Combobox from './particle-data-input/combobox'
 import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from '@/components/ui/use-toast'
-import { type Signatures, createSignatures, getServiceType } from '@/lib/api'
+import {
+  type Signatures,
+  createSignatures,
+  getServiceType,
+  getStatuses,
+  HardwareStatus
+} from '@/lib/api'
 import SignaturesView from '@/app/components/signatures-view'
 import { createClient } from '@/utils/supabase/client'
 
@@ -58,6 +64,7 @@ export default function Create() {
   const [maxWidthHeight, setMaxWidthHeight] = useState(PRODUCTION_MAX_WIDTH_HEIGHT)
   const [minWidthHeight, setMinWidthHeight] = useState(PRODUCTION_MIN_WIDTH_HEIGHT)
   const [maxImages, setMaxImages] = useState(PRODUCTION_MAX_IMAGES)
+  const [hardwareStatus, setHardwareStatus] = useState(HardwareStatus.None)
 
   const supabase = createClient()
 
@@ -83,6 +90,11 @@ export default function Create() {
         }
       })
       .catch()
+
+    getStatuses().then((statuses) => {
+      const [_, hardware] = statuses!
+      setHardwareStatus(hardware as HardwareStatus)
+    })
 
     setQuery({
       ...query,
@@ -230,7 +242,12 @@ export default function Create() {
 
       setCreationData(body)
 
-      setSignatures(await createSignatures(body))
+      const createdSignatures = await createSignatures(body)
+      if (createdSignatures) {
+        setSignatures(createdSignatures)
+      } else {
+        throw new Error()
+      }
     } catch {
       toast({
         variant: 'destructive',
@@ -294,6 +311,12 @@ export default function Create() {
                     data-driven art creation
                   </Link>{' '}
                   to better understand how the data is used to create an experiment signature.
+                </p>
+                <p className="text-sm text-muted-foreground tracking-tight">
+                  <b>note:</b> the current creation model is designed for demonstrations purposes
+                  only and does not yet fully incorporate all particle data. future improvements can
+                  (and may) be made to further enhance it and thus better represent particle data in
+                  a artistic form.
                 </p>
               </div>
               <form
@@ -568,14 +591,24 @@ export default function Create() {
                       <div className="flex md:flex-row flex-col gap-y-3 gap-x-3 md:items-center">
                         <Button
                           type={'submit'}
-                          disabled={!unableToCreate || creationLoading}
+                          disabled={
+                            !unableToCreate ||
+                            creationLoading ||
+                            hardwareStatus === HardwareStatus.None
+                          }
                           className="rounded-none shadow-none hover:bg-foreground w-20"
                         >
                           {creationLoading ? <LoaderCircle className="animate-spin" /> : 'create'}
                         </Button>
-                        {!unableToCreate && (
-                          <p className="text-muted-foreground flex h-auto flex-col gap-y-0 text-[12.8px] lowercase tracking-tighter font-normal">
-                            please fill in all the particle data.
+                        {hardwareStatus !== HardwareStatus.None ? (
+                          !unableToCreate && (
+                            <p className="text-muted-foreground flex h-auto flex-col leading-5 gap-y-0 text-[12.8px] lowercase tracking-tighter font-normal">
+                              please fill in all the particle data.
+                            </p>
+                          )
+                        ) : (
+                          <p className="text-muted-foreground flex h-auto flex-col leading-5 gap-y-0 text-[12.8px] lowercase tracking-tighter font-normal">
+                            create is currently unavailable.
                           </p>
                         )}
                       </div>

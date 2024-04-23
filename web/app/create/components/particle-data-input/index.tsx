@@ -91,20 +91,18 @@ export default function ParticleDataInput({
                 onChange={handleVelocityChange}
                 onBlur={validateValue}
               />
-              <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
+              <p className="text-muted-foreground text-[12.8px] max-w-36 break-words lowercase tracking-tighter font-normal leading-5">
                 {(parseInt(particleData.velocity) * 1e-10).toFixed(10)} cm/ps
               </p>
             </div>
           </div>
           <div>
             <div className="flex flex-col gap-y-3">
-              <Label className="font-normal text-muted-foreground">
-                spatial distribution (coming soon)
-              </Label>
+              <Label className="font-normal text-muted-foreground">spatial distribution</Label>
               <Input type="file" disabled className="rounded-none shadow-none" />
 
               <p className="text-muted-foreground text-[12.8px] lowercase tracking-tighter font-normal leading-5">
-                allowed file types: .csv, .npy
+                (coming soon) allowed file types: .csv, .npy
               </p>
             </div>
           </div>
