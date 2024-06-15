@@ -15,7 +15,7 @@ type ShareSectionProps = {
 export default function ShareSection({ signature }: ShareSectionProps) {
   async function shareConfiguration() {
     try {
-      await copy(`https://particles-on-canvas.vercel.app/create${signature.creation_query}`)
+      await copy(`https://particles.joaobarbosa.space/create${signature.creation_query}`)
 
       toast({
         className: 'rounded-none p-2',
@@ -32,7 +32,7 @@ export default function ShareSection({ signature }: ShareSectionProps) {
 
   async function shareCreation() {
     try {
-      await copy(`https://particles-on-canvas.vercel.app/creations/${signature.id}`)
+      await copy(`https://particles.joaobarbosa.space/creations/${signature.id}`)
 
       toast({
         className: 'rounded-none p-2',
@@ -65,7 +65,7 @@ export default function ShareSection({ signature }: ShareSectionProps) {
         share creation
         <LinkIcon height={16} width={16} />
       </Button>
-      <Link href={`https://particles-on-canvas.vercel.app/create${signature.creation_query}`}>
+      <Link href={`https://particles.joaobarbosa.space/create${signature.creation_query}`}>
         <Button className="hover:bg-foreground bg-foreground text-background rounded-none flex h-9 flex-row gap-x-1 border">
           create copy
         </Button>

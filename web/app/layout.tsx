@@ -11,7 +11,18 @@ import { Toaster } from '@/components/ui/toaster'
 export const metadata: Metadata = {
   title: 'PARTICLES ON CANVAS',
   description: 'Creating digital art to further scientific divulgation',
-  icons: [{ rel: 'icon', url: Icon.src }]
+  icons: [{ rel: 'icon', url: Icon.src }],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true
+    }
+  },
+  verification: {
+    google: 'YY802qWK9pKmbSRmPjxpDn9sJ8BO4-2-UB94eC9HQO0'
+  }
 }
 
 export default function RootLayout({

@@ -5,7 +5,7 @@ export default function robots() {
         userAgent: '*'
       }
     ],
-    sitemap: 'https://particles-on-canvas.vercel.app/sitemap.xml',
-    host: 'https://particles-on-canvas.vercel.app'
+    sitemap: 'https://particles.joaobarbosa.space/sitemap.xml',
+    host: 'https://particles.joaobarbosa.space'
   }
 }

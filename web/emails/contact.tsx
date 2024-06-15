@@ -11,7 +11,7 @@ type ContactEmailProps = {
   authorsMailingList: string[]
 }
 
-const baseUrl = 'https://particles-on-canvas.vercel.app'
+const baseUrl = 'https://particles.joaobarbosa.space'
 
 export default function ContactEmail({
   firstName,

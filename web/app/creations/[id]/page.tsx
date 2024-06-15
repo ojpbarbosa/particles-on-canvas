@@ -40,8 +40,33 @@ export async function generateMetadata({ params }: CreationPageProps): Promise<M
 
   const { id, creation_name: creationName } = data![0] as Signature
 
+  const displayName = creationName ? creationName.toUpperCase() : id.split('-')[0].toUpperCase()
+  const authorFullName = `${data![0].creator_first_name} ${data![0].creator_last_name}`
+
   return {
-    title: `PARTICLES ON CANVAS - CREATIONS - ${creationName ? creationName.toUpperCase() : id.split('-')[0].toUpperCase()}`
+    title: `PARTICLES ON CANVAS - CREATION ${displayName}`,
+    description: `A particle signature by ${authorFullName}.`,
+    icons: [
+      {
+        url: data![0].signatures[0],
+        type: 'image/png',
+        rel: 'icon'
+      }
+    ],
+    openGraph: {
+      title: `PARTICLES ON CANVAS - CREATION ${displayName}`,
+      description: `A particle signature by ${authorFullName}.`,
+      type: 'article',
+      url: `https://https://particles.joaobarbosa.space/creations/${id}`,
+      images: [
+        {
+          url: data![0].signatures[0],
+          width: data![0].width,
+          height: data![0].height,
+          alt: `PARTICLES ON CANVAS - CREATION ${displayName}`
+        }
+      ]
+    }
   }
 }
 

@@ -26,7 +26,7 @@ Particles on Canvas was created by:
 - [Hugo Gomes Soares](https://github.com/Miojodetomat)
 - [João Pedro Ferreira Barbosa](https://github.com/ojpbarbosa)
 - [Julia Enriquetto de Brito](https://github.com/juliaenriquetto)
-- Marcos Godinho Filho
+- [Marcos Godinho Filho](https://github.com/Marcos-Godinho-Filho)
 - [Nicolas Militão Livotto](https://github.com/nimilitao)
 
 ## License

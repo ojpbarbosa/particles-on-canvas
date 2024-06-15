@@ -33,7 +33,7 @@ export default function SignaturesView({
 
   async function shareConfiguration() {
     try {
-      await copy(`https://particles-on-canvas.vercel.app/create${queryParams}`)
+      await copy(`https://particles.joaobarbosa.space/create${queryParams}`)
 
       toast({
         className: 'rounded-none p-2',
