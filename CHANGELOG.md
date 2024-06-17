@@ -16,6 +16,13 @@ All notable changes to this project will be documented in this file. See [standa
 
 * **web:** create creations page open graph spec ([2f019e8](https://github.com/ojpbarbosa/particles-on-canvas/commit/2f019e8dc5825759b58a56735a38a15f06b67588))
 
+## [1.1.0](https://github.com/ojpbarbosa/particles-on-canvas/compare/v1.0.1...v1.1.0) (2024-06-17)
+
+
+### Features
+
+* **web:** create creations page open graph spec ([2f019e8](https://github.com/ojpbarbosa/particles-on-canvas/commit/2f019e8dc5825759b58a56735a38a15f06b67588))
+
 ### [1.0.1](https://github.com/ojpbarbosa/particles-on-canvas/compare/v1.0.0-beta.0...v1.0.1) (2024-04-23)
 
 
